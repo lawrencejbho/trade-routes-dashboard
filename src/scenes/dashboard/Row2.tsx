@@ -2,8 +2,8 @@ import dynamic from "next/dynamic"; // need this for pie chart or will get hydra
 
 import React, { useMemo } from "react";
 import DashboardBox from "../../components/DashboardBox";
-// import { useGetProductsQuery, useGetKpisQuery } from "@/state/api";
 import BoxHeader from "@/components/BoxHeader";
+import FlexBetween from "@/components/FlexBetween";
 import {
   ResponsiveContainer,
   LineChart,
@@ -22,9 +22,16 @@ import {
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-import FlexBetween from "@/components/FlexBetween";
+import {
+  GetKpisResponse,
+  GetProductsResponse,
+  GetTransactionsResponse,
+} from "@/types";
 
-type Props = {};
+type Props = {
+  data: GetKpisResponse[];
+  data2: GetProductsResponse[];
+};
 
 const pieData = [
   { name: "Group A", value: 600 },

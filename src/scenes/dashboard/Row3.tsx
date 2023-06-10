@@ -15,7 +15,17 @@ import { useTheme } from "@mui/material/styles";
 import FlexBetween from "@/components/FlexBetween";
 import { Cell, Pie } from "recharts";
 
-type Props = {};
+import {
+  GetKpisResponse,
+  GetProductsResponse,
+  GetTransactionsResponse,
+} from "@/types";
+
+type Props = {
+  data: GetKpisResponse[];
+  data2: GetProductsResponse[];
+  data3: GetTransactionsResponse[];
+};
 
 const PieChart = dynamic(
   () => import("recharts").then((recharts) => recharts.PieChart),

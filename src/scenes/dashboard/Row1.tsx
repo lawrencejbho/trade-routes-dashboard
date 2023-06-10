@@ -20,12 +20,19 @@ import {
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
-type Props = {};
+import {
+  GetKpisResponse,
+  GetProductsResponse,
+  GetTransactionsResponse,
+} from "@/types";
+
+type Props = {
+  data: GetKpisResponse[];
+};
 
 function Row1({ data }: Props) {
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
-  console.log(data);
 
   // run this funciton only when data changes
   const revenueExpenses = useMemo(() => {
