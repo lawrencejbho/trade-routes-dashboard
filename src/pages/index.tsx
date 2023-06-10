@@ -1,5 +1,4 @@
 // pages/index.tsx
-import { useEffect } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import Navbar from "@/scenes/navbar";
 import Dashboard from "@/scenes/dashboard";
@@ -11,8 +10,6 @@ import {
   GetProductsResponse,
   GetTransactionsResponse,
 } from "@/types";
-
-type Props = {};
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch(
