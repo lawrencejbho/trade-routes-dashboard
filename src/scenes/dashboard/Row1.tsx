@@ -28,7 +28,6 @@ type Props = {
 };
 
 function Row1({ data, popularDrinksData }: Props) {
-  console.log(popularDrinksData);
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
 

@@ -1,12 +1,20 @@
 import { BigQuery } from "@google-cloud/bigquery";
+import { readFileSync } from "fs";
+
 import path from "path";
 
 export default async function popularDrinks(): Promise<any[]> {
   // helps you get the absolute path within your file system and grabs the json directory
-  const jsonDirectory = path.join(process.cwd(), "json");
+  const jsonDirectory = path.join(
+    process.cwd(),
+    "json",
+    "/square-big-query-3917c272476a.json"
+  );
+  const test = readFileSync(jsonDirectory, "utf8");
+  console.log(test);
 
   const bigqueryClient = new BigQuery({
-    keyFilename: jsonDirectory + "/square-big-query-3917c272476a.json",
+    keyFilename: jsonDirectory,
     projectId: "square-big-query",
   });
 

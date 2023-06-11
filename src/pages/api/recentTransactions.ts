@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BigQuery } from "@google-cloud/bigquery";
 import path from "path";
+import { readFileSync } from "fs";
 
 type Data = {
   response: any[];
