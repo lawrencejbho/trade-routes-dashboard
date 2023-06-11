@@ -15,8 +15,8 @@ type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
-  data4: ExtendedGetPopularDrinksResponse;
-  data5: ExtendedGetRecentTransactionsResponse;
+  popularDrinksData: ExtendedGetPopularDrinksResponse;
+  recentTransactionsData: ExtendedGetRecentTransactionsResponse;
 };
 
 interface ExtendedGetPopularDrinksResponse {
@@ -73,7 +73,13 @@ const gridTemplateSmallScreens = `
 "j"
 `;
 
-function Dashboard({ data, data2, data3, data4, data5 }: Props) {
+function Dashboard({
+  data,
+  data2,
+  data3,
+  popularDrinksData,
+  recentTransactionsData,
+}: Props) {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
   return (
     <Box
@@ -95,9 +101,14 @@ function Dashboard({ data, data2, data3, data4, data5 }: Props) {
             }
       }
     >
-      <Row1 data={data} data4={data4} />
+      <Row1 data={data} popularDrinksData={popularDrinksData} />
       <Row2 data={data} data2={data2} />
-      <Row3 data={data} data2={data2} data3={data3} data5={data5} />
+      <Row3
+        data={data}
+        data2={data2}
+        data3={data3}
+        recentTransactionsData={recentTransactionsData}
+      />
     </Box>
   );
 }

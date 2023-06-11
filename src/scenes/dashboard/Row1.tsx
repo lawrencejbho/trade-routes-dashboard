@@ -33,10 +33,10 @@ interface ExtendedGetPopularDrinksResponse {
 
 type Props = {
   data: GetKpisResponse[];
-  data4: ExtendedGetPopularDrinksResponse;
+  popularDrinksData: ExtendedGetPopularDrinksResponse;
 };
 
-function Row1({ data, data4 }: Props) {
+function Row1({ data, popularDrinksData }: Props) {
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
 
@@ -80,8 +80,8 @@ function Row1({ data, data4 }: Props) {
   }, [data]);
 
   const popularDrinks = useMemo(() => {
-    return data4.response;
-  }, [data4]);
+    return popularDrinksData.response;
+  }, [popularDrinksData]);
 
   return (
     <>
@@ -252,12 +252,10 @@ function Row1({ data, data4 }: Props) {
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              style={{ fontSize: "10px" }}
               interval={0}
               tick={{
                 fontSize: "10px",
                 width: "50px",
-                wordWrap: "break-word",
               }}
             />
             <YAxis

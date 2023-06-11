@@ -8,7 +8,7 @@ import DashboardBox from "../../components/DashboardBox";
 //   useGetTransactionsQuery,
 // } from "@/state/api";
 import BoxHeader from "@/components/BoxHeader";
-import { DataGrid, GridCellParams } from "@mui/x-data-grid";
+import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -22,6 +22,19 @@ import {
   GetRecentTransactionsResponse,
 } from "@/types";
 
+interface ExtendedGridCellParams extends GridCellParams {
+  value: number;
+}
+
+interface ColumnWithRenderCell {
+  field: string;
+  headerName: string;
+  flex: number;
+  renderCell?: {
+    params?: ExtendedGridCellParams;
+  };
+}
+
 interface ExtendedGetRecentTransactionsResponse {
   response: GetRecentTransactionsResponse[];
 }
@@ -30,7 +43,7 @@ type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
-  data5: ExtendedGetRecentTransactionsResponse;
+  recentTransactionsData: ExtendedGetRecentTransactionsResponse;
 };
 
 const PieChart = dynamic(
@@ -42,21 +55,21 @@ function Row3({
   data: kpiData,
   data2: productData,
   data3: transactionData,
-  data5,
+  recentTransactionsData,
 }: Props) {
   const { palette } = useTheme();
   const pieColors = [palette.primary[800], palette.primary[500]];
 
   const recentTransactions = useMemo(() => {
-    if (data5) {
-      return data5.response.map((item) => ({
+    if (recentTransactionsData) {
+      return recentTransactionsData.response.map((item) => ({
         total: item.amount,
         tip: item.amount_1,
         createdAt: item.createdAt.value,
         cardholderName: item.cardholderName,
       }));
     }
-  }, [data5]);
+  }, [recentTransactionsData]);
 
   const pieChartData = useMemo(() => {
     if (kpiData) {
@@ -104,8 +117,8 @@ function Row3({
       flex: 0.35,
       renderCell: (params: GridCellParams) => {
         if (params.value == null || params.value == 0) return `$0`;
-        const dollar = Math.floor(params.value / 100);
-        return `$${dollar}.${params.value % (dollar * 100)}`;
+        const dollar = Math.floor(+params.value / 100);
+        return `$${dollar}.${+params.value % (dollar * 100)}`;
       },
     },
     {
@@ -114,8 +127,8 @@ function Row3({
       flex: 0.3,
       renderCell: (params: GridCellParams) => {
         if (params.value == null) return `$0`;
-        const dollar = Math.floor(params.value / 100);
-        return `$${dollar}.${params.value % (dollar * 100)}`;
+        const dollar = Math.floor(+params.value / 100);
+        return `$${dollar}.${+params.value % (dollar * 100)}`;
       },
     },
   ];

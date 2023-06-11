@@ -38,6 +38,9 @@ export default async function handler(
     // rows.forEach((row) => console.log(row));
     res.status(200).json({ response: rows });
   }
-
-  popularDrinks();
+  try {
+    popularDrinks();
+  } catch (error) {
+    res.status(404);
+  }
 }

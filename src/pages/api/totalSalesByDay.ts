@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  async function recentTransactions(): Promise<any[]> {
+  async function totalSalesByDay() {
     // helps you get the absolute path within your file system and grabs the json directory
     const jsonDirectory = path.join(process.cwd(), "json");
 
@@ -19,16 +19,16 @@ export default async function handler(
       projectId: "square-big-query",
     });
 
-    const sqlQuery = `SELECT totalMoney.amount, tipMoney.amount, createdAt, cardDetails.card.cardholderName
-    FROM \`square-big-query.my_states_dataset3.payments\` 
-    where createdAt BETWEEN "2023-06-01T00:00:00Z" AND "2023-06-10T07:41:03Z"
-    ORDER by createdAT DESC
-    LIMIT 50`;
-
-    // const sqlQuery = `SELECT tenders.customerId, count(*)
-    // FROM \`square-big-query.my_states_dataset3.orders\` CROSS JOIN UNNEST(tenders) AS tenders
-    // ORDER by count(*) DESC
-    // LIMIT 50`;
+    const sqlQuery = `SELECT DISTINCT DATE(p.createdAt) AS day, t.total_amount
+    FROM \`square-big-query.my_states_dataset3.payments\` AS p
+    JOIN (
+      SELECT DATE(createdAt) AS day, SUM(totalMoney.amount) AS total_amount
+      FROM \`square-big-query.my_states_dataset3.payments\`
+      WHERE createdAt BETWEEN "2023-06-01T00:00:00Z" AND "2023-06-10T07:41:03Z"
+      GROUP BY DATE(createdAt)
+    ) AS t ON DATE(p.createdAt) = t.day
+    ORDER BY day;
+    `;
 
     const options = {
       query: sqlQuery,
@@ -39,20 +39,8 @@ export default async function handler(
 
     // console.log("Rows:");
     // rows.forEach((row) => console.log(row));
-
-    return rows;
+    res.status(200).json({ response: rows });
   }
 
-  try {
-    const data = await recentTransactions();
-    res.status(200).json({ response: data });
-  } catch (error) {
-    res.status(404);
-  }
+  totalSalesByDay();
 }
-
-export const config = {
-  api: {
-    externalResolver: true,
-  },
-};

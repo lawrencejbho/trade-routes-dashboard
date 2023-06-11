@@ -29,13 +29,20 @@ export const getStaticProps: GetStaticProps = async () => {
   );
   const data3 = await res3.json();
 
-  const res4 = await fetch("http://localhost:3000/api/popularDrinks");
-  const data4 = await res4.json();
+  const popularDrinksResponse = await fetch(
+    "http://localhost:3000/api/popularDrinks"
+  );
+  const popularDrinksData = await popularDrinksResponse.json();
 
-  const res5 = await fetch("http://localhost:3000/api/recentTransactions");
-  const data5 = await res5.json();
+  const recentTransactionsResponse = await fetch(
+    "http://localhost:3000/api/recentTransactions"
+  );
+  const recentTransactionsData = await recentTransactionsResponse.json();
 
-  return { props: { data, data2, data3, data4, data5 }, revalidate: 60 };
+  return {
+    props: { data, data2, data3, popularDrinksData, recentTransactionsData },
+    revalidate: 60,
+  };
 };
 
 interface ExtendedGetPopularDrinksResponse {
@@ -50,11 +57,17 @@ interface KpiProps {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
-  data4: ExtendedGetPopularDrinksResponse;
-  data5: ExtendedGetRecentTransactionsResponse;
+  popularDrinksData: ExtendedGetPopularDrinksResponse;
+  recentTransactionsData: ExtendedGetRecentTransactionsResponse;
 }
 
-export default function Home({ data, data2, data3, data4, data5 }: KpiProps) {
+export default function Home({
+  data,
+  data2,
+  data3,
+  popularDrinksData,
+  recentTransactionsData,
+}: KpiProps) {
   return (
     <>
       <Box width="100%" height="100vh" padding="1rem 2rem 4rem 2rem">
@@ -63,8 +76,8 @@ export default function Home({ data, data2, data3, data4, data5 }: KpiProps) {
           data={data}
           data2={data2}
           data3={data3}
-          data4={data4}
-          data5={data5}
+          popularDrinksData={popularDrinksData}
+          recentTransactionsData={recentTransactionsData}
         />
       </Box>
     </>

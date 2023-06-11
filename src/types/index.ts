@@ -64,6 +64,8 @@ export interface GetPopularDrinksResponse {
 export interface GetRecentTransactionsResponse {
   amount: number;
   amount_1: number;
-  createdAt: string;
+  createdAt: {
+    value: string;
+  };
   cardholderName: string;
 }
