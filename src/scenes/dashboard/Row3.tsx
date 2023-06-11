@@ -35,15 +35,11 @@ interface ColumnWithRenderCell {
   };
 }
 
-interface ExtendedGetRecentTransactionsResponse {
-  response: GetRecentTransactionsResponse[];
-}
-
 type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
-  recentTransactionsData: ExtendedGetRecentTransactionsResponse;
+  recentTransactionsData: GetRecentTransactionsResponse[];
 };
 
 const PieChart = dynamic(
@@ -62,7 +58,7 @@ function Row3({
 
   const recentTransactions = useMemo(() => {
     if (recentTransactionsData) {
-      return recentTransactionsData.response.map((item) => ({
+      return recentTransactionsData.map((item) => ({
         total: item.amount,
         tip: item.amount_1,
         createdAt: item.createdAt.value,

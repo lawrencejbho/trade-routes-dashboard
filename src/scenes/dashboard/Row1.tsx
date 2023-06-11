@@ -20,23 +20,15 @@ import {
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
-import {
-  GetKpisResponse,
-  GetPopularDrinksResponse,
-  GetProductsResponse,
-  GetTransactionsResponse,
-} from "@/types";
-
-interface ExtendedGetPopularDrinksResponse {
-  response: GetPopularDrinksResponse[];
-}
+import { GetKpisResponse, GetPopularDrinksResponse } from "@/types";
 
 type Props = {
   data: GetKpisResponse[];
-  popularDrinksData: ExtendedGetPopularDrinksResponse;
+  popularDrinksData: GetPopularDrinksResponse[];
 };
 
 function Row1({ data, popularDrinksData }: Props) {
+  console.log(popularDrinksData);
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
 
@@ -79,9 +71,9 @@ function Row1({ data, popularDrinksData }: Props) {
     );
   }, [data]);
 
-  const popularDrinks = useMemo(() => {
-    return popularDrinksData.response;
-  }, [popularDrinksData]);
+  // const popularDrinks = useMemo(() => {
+  //   return popularDrinksData;
+  // }, [popularDrinksData]);
 
   return (
     <>
@@ -225,7 +217,7 @@ function Row1({ data, popularDrinksData }: Props) {
           <BarChart
             width={500}
             height={300}
-            data={popularDrinks}
+            data={popularDrinksData}
             margin={{
               top: 17,
               right: 15,

@@ -15,17 +15,9 @@ type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
-  popularDrinksData: ExtendedGetPopularDrinksResponse;
-  recentTransactionsData: ExtendedGetRecentTransactionsResponse;
+  popularDrinksData: GetPopularDrinksResponse[];
+  recentTransactionsData: GetRecentTransactionsResponse[];
 };
-
-interface ExtendedGetPopularDrinksResponse {
-  response: GetPopularDrinksResponse[];
-}
-
-interface ExtendedGetRecentTransactionsResponse {
-  response: GetRecentTransactionsResponse[];
-}
 
 const gridTemplateLargeScreens = `
 "a b c"
