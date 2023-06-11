@@ -32,23 +32,14 @@ export const getStaticProps: GetStaticProps = async () => {
   );
   const data3 = await res3.json();
 
-  // const popularDrinksResponse = await fetch(
-  //   "http://localhost:3000/api/popularDrinks"
-  // );
-  // const popularDrinksData = await popularDrinksResponse.json();
+  // have to use json parse and json stringify to serialize.  Could not find a proper solution for this
   const popularDrinksResponse = await getPopularDrinks();
   const popularDrinksData = JSON.parse(JSON.stringify(popularDrinksResponse));
-  // const popularDrinksData = await popularDrinksResponse.json();
 
-  // const recentTransactionsResponse = await fetch(
-  //   "http://localhost:3000/api/recentTransactions"
-  // );
-  // const recentTransactionsData = await recentTransactionsResponse.json();
   const recentTransactionsResponse = await getRecentTransactions();
   const recentTransactionsData = JSON.parse(
     JSON.stringify(recentTransactionsResponse)
   );
-  // const recentTransactionsData = await recentTransactionsResponse.json();
 
   return {
     props: { data, data2, data3, popularDrinksData, recentTransactionsData },

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "trade-routes-363205",
+  "private_key_id": "aff4e1c0d93bfb1c60b26f251f639031ee805dc2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC0vnzP23gctdHL\nZKOrT9x1l34vELwlMf+DzncCGTttrFu2JK+jVuCweL6YbwcRAbS6fsPEpJsoU3EL\nArE16hNzqQ66jmjUhhj9go/i/5pPgpk0u3aeevfNWmjktVjtv2t82deg6E7O5YjP\n0ujOFReRcTs79yJ0XBCYaR/dl78g0u9rfmnt7VIV18R8i+q03vLYOF5IGW89wE6S\nsFNBkNihb2PJUtKZM7Unnhth18IMec7Y1DtPObNvyoJm4jOS87NDipPF36dw9Nrv\n9s/8fkIjmR+EEQVEn1obJ3TOLSeepRIICYxNhrRWDEbMkzRwy62KZGBvqu1S1yxQ\n6I4+LmcTAgMBAAECggEARF+rJ5aGoZXGf4Lax3u2kmV0vqk+A3QejOYV7x1Mdfi1\n2PmX19qNtTR4JYIa0jwq+kHqHQGIEIFASkICd7rNEPvrLnehAISZ/4zckarP3TQy\ncNhZzyoFhBGnjJ1tvsKjDt/5yk0XQv1h+/x1RUCFYefL2KtsxUfunzllbJZzHx8J\nYPAkajzY3fEwijmEg2c1RKOIs4pf5tV42x+8OCHX2M5qsa+8d2EvJe2I4N04ELgs\ncZ67f5v3zInDJwZqJjLBs/ybNFiSAMcOWhPL7SFBZqeLvQZVwjTj2Gdp6Mzqq+xV\nYhgZRcRxEapf932J2XBAeMBDyX3cKJ2NRaEFCMS/gQKBgQDo2118NQAAtkIkbFwT\nhWRYiHcWtHwQZukUCGaVAGmZekddjrMlcSGR4nNbmcaeOYOlZ4WZaYIEspbER2pB\noFEeZfsK+7DDHut4T8JamSG3SJ3n4bmKFvdtjXCxmH5SFMJiCpINu2BxwJuPzgM4\nbgX3l4XSWBce8+klRcAMX1hmiQKBgQDGtTQe7oawAzVSIRmh2lrf6OaQHYmCWQ6U\nKbbKpZ+wNwjth0IZ9Z8/CRApc+jmjP2gNp+I4msxv78v3XL5/uSV88ysDaJk1+6h\nJddheF9y5nQ2WQwyenQRGAwnk0oEc2001r/9JbWtqY+X1QlnPuODIoayVqwd7/h1\nNXiGuc85uwKBgGMJug8z85ZZ7nPTaq4a0/0bvZr4lLPdMVEF6auCC2ftrCDMqsFI\nBsEnkWzqUKHHUIivKRGA4H3i/2DoBvd2mknVkhqvxhSXOAtp0P37l21/Azo2tVVY\nQ1BjEgVXGJMMpUhRuqEAixqWkxNsyc3cbclKtu4p7VuK3iSuL+qTOuQRAoGAJI3B\nAM+wR0DP1kPwiy23+ejGQUyttyTa4baqwaymK6x0H/350vy0RsxMBNQlzAOzxH1H\n6857GbPEX/HE7OhO9Kbcx+naLeLrKwnjDTMvm9t5FWZcMA0GvP5HfiBCRX9WX5oB\nx3fgbAn9OFkgWbXf9Ietb7EyCG/UrPshKOeVj3ECgYEAiuPFuTRCf71Lf5au50ig\n+Sca2eZgX8uf47qbdgiAtTTPfL52I6rTZY5VDcU/WG6ZJdWHBb9fYSe8kXCbCI6K\n63HhA7zX/Ss5hH/CTHF+TNqk+UcH+DDWUPupe4czEd+AIGLRxSm0CRuOTaXhZ1T0\n2r4QYI8ohxKFvLWgAsrdKG4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "trade-routes-dev@trade-routes-363205.iam.gserviceaccount.com",
+  "client_id": "111857833337490491330",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/trade-routes-dev%40trade-routes-363205.iam.gserviceaccount.com"
+}

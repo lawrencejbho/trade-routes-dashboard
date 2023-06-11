@@ -6,7 +6,7 @@ export default async function recentTransactions(): Promise<any[]> {
   // helps you get the absolute path within your file system and grabs the json directory
   const jsonDirectory = path.join(
     process.cwd(),
-    "json",
+    "files",
     "/square-big-query-3917c272476a.json"
   );
   const test = readFileSync(jsonDirectory, "utf8");
