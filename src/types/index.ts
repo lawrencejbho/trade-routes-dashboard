@@ -69,3 +69,10 @@ export interface GetRecentTransactionsResponse {
   };
   cardholderName: string;
 }
+
+export interface GetTotalSalesResponse {
+  day: {
+    value: string;
+  };
+  total_amount: number;
+}

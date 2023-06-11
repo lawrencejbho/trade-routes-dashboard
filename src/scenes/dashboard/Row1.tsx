@@ -20,16 +20,23 @@ import {
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
-import { GetKpisResponse, GetPopularDrinksResponse } from "@/types";
+import {
+  GetKpisResponse,
+  GetPopularDrinksResponse,
+  GetTotalSalesResponse,
+} from "@/types";
 
 type Props = {
   data: GetKpisResponse[];
   popularDrinksData: GetPopularDrinksResponse[];
+  totalSalesData: GetTotalSalesResponse[];
 };
 
-function Row1({ data, popularDrinksData }: Props) {
+function Row1({ data, popularDrinksData, totalSalesData }: Props) {
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
+
+  console.log(totalSalesData);
 
   // run this funciton only when data changes
   const revenueExpenses = useMemo(() => {
@@ -70,23 +77,31 @@ function Row1({ data, popularDrinksData }: Props) {
     );
   }, [data]);
 
-  // const popularDrinks = useMemo(() => {
-  //   return popularDrinksData;
-  // }, [popularDrinksData]);
+  const totalSales = useMemo(() => {
+    return (
+      totalSalesData &&
+      totalSalesData.map(({ day, total_amount }) => {
+        return {
+          day: day.value,
+          total_amount: total_amount,
+        };
+      })
+    );
+  }, [data]);
 
   return (
     <>
       <DashboardBox gridArea="a">
         <BoxHeader
-          title="Revenue and Expenses"
-          subtitle="top line represents revenue, bottom line represents expenses"
+          title="Total Sales By Day"
+          subtitle="total sales displayed per day "
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             width={500}
             height={400}
-            data={revenueExpenses}
+            data={totalSales}
             margin={{
               top: 15,
               right: 25,
@@ -107,21 +122,9 @@ function Row1({ data, popularDrinksData }: Props) {
                   stopOpacity={0}
                 />
               </linearGradient>
-              <linearGradient id="colorExpenses" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor={palette.primary[300]}
-                  stopOpacity={0.5}
-                />
-                <stop
-                  offset="95%"
-                  stopColor={palette.primary[300]}
-                  stopOpacity={0}
-                />
-              </linearGradient>
             </defs>
             <XAxis
-              dataKey="name"
+              dataKey="day"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
@@ -129,24 +132,15 @@ function Row1({ data, popularDrinksData }: Props) {
               tickLine={false}
               axisLine={{ strokeWidth: "0" }}
               style={{ fontSize: "10px" }}
-              domain={[8000, 23000]}
             />
             <Tooltip />
             <Area
               type="monotone"
-              dataKey="revenue"
+              dataKey="total_amount"
               dot={true}
               stroke={palette.primary.main}
               fillOpacity={1}
               fill="url(#colorRevenue)"
-            />
-            <Area
-              type="monotone"
-              dataKey="expenses"
-              dot={true}
-              stroke={palette.primary.main}
-              fillOpacity={1}
-              fill="url(#colorExpenses)"
             />
           </AreaChart>
         </ResponsiveContainer>

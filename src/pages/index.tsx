@@ -7,6 +7,7 @@ import { Box } from "@mui/material";
 
 import getPopularDrinks from "@/lib/getPopularDrinks";
 import getRecentTransactions from "@/lib/getRecentTransactions";
+import getTotalSales from "@/lib/getTotalSales";
 
 import {
   GetKpisResponse,
@@ -14,6 +15,7 @@ import {
   GetTransactionsResponse,
   GetPopularDrinksResponse,
   GetRecentTransactionsResponse,
+  GetTotalSalesResponse,
 } from "@/types";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -32,7 +34,7 @@ export const getStaticProps: GetStaticProps = async () => {
   );
   const data3 = await res3.json();
 
-  // have to use json parse and json stringify to serialize.  Could not find a proper solution for this
+  // have to use json parse and json stringify to serialize. Could not find a proper solution for this
   const popularDrinksResponse = await getPopularDrinks();
   const popularDrinksData = JSON.parse(JSON.stringify(popularDrinksResponse));
 
@@ -41,8 +43,18 @@ export const getStaticProps: GetStaticProps = async () => {
     JSON.stringify(recentTransactionsResponse)
   );
 
+  const totalSalesResponse = await getTotalSales();
+  const totalSalesData = JSON.parse(JSON.stringify(totalSalesResponse));
+
   return {
-    props: { data, data2, data3, popularDrinksData, recentTransactionsData },
+    props: {
+      data,
+      data2,
+      data3,
+      popularDrinksData,
+      recentTransactionsData,
+      totalSalesData,
+    },
     revalidate: 60,
   };
 };
@@ -53,6 +65,7 @@ interface KpiProps {
   data3: GetTransactionsResponse[];
   popularDrinksData: GetPopularDrinksResponse[];
   recentTransactionsData: GetRecentTransactionsResponse[];
+  totalSalesData: GetTotalSalesResponse[];
 }
 
 export default function Home({
@@ -61,6 +74,7 @@ export default function Home({
   data3,
   popularDrinksData,
   recentTransactionsData,
+  totalSalesData,
 }: KpiProps) {
   return (
     <>
@@ -72,6 +86,7 @@ export default function Home({
           data3={data3}
           popularDrinksData={popularDrinksData}
           recentTransactionsData={recentTransactionsData}
+          totalSalesData={totalSalesData}
         />
       </Box>
     </>

@@ -10,12 +10,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  async function totalSalesByDay(): Promise<any[]> {
+  async function totalSales(): Promise<any[]> {
     // helps you get the absolute path within your file system and grabs the json directory
-    const jsonDirectory = path.join(process.cwd(), "json");
+    const jsonDirectory = path.join(
+      process.cwd(),
+      "files",
+      "/square-big-query-3917c272476a.json"
+    );
 
     const bigqueryClient = new BigQuery({
-      keyFilename: jsonDirectory + "/square-big-query-3917c272476a.json",
+      keyFilename: jsonDirectory,
       projectId: "square-big-query",
     });
 
@@ -40,7 +44,7 @@ export default async function handler(
     return rows;
   }
   try {
-    const data = await totalSalesByDay();
+    const data = await totalSales();
     res.status(200).json({ response: data });
   } catch (error) {
     res.status(404);

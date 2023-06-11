@@ -12,10 +12,14 @@ export default async function handler(
 ) {
   async function popularDrinks(): Promise<any[]> {
     // helps you get the absolute path within your file system and grabs the json directory
-    const jsonDirectory = path.join(process.cwd(), "json");
+    const jsonDirectory = path.join(
+      process.cwd(),
+      "files",
+      "/square-big-query-3917c272476a.json"
+    );
 
     const bigqueryClient = new BigQuery({
-      keyFilename: jsonDirectory + "/square-big-query-3917c272476a.json",
+      keyFilename: jsonDirectory,
       projectId: "square-big-query",
     });
 

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BigQuery } from "@google-cloud/bigquery";
 import path from "path";
-import { readFileSync } from "fs";
 
 type Data = {
   response: any[];
@@ -13,10 +12,14 @@ export default async function handler(
 ) {
   async function recentTransactions(): Promise<any[]> {
     // helps you get the absolute path within your file system and grabs the json directory
-    const jsonDirectory = path.join(process.cwd(), "json");
+    const jsonDirectory = path.join(
+      process.cwd(),
+      "files",
+      "/square-big-query-3917c272476a.json"
+    );
 
     const bigqueryClient = new BigQuery({
-      keyFilename: jsonDirectory + "/square-big-query-3917c272476a.json",
+      keyFilename: jsonDirectory,
       projectId: "square-big-query",
     });
 
