@@ -19,12 +19,18 @@ import {
   GetKpisResponse,
   GetProductsResponse,
   GetTransactionsResponse,
+  GetRecentTransactionsResponse,
 } from "@/types";
+
+interface ExtendedGetRecentTransactionsResponse {
+  response: GetRecentTransactionsResponse[];
+}
 
 type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
+  data5: ExtendedGetRecentTransactionsResponse;
 };
 
 const PieChart = dynamic(
@@ -36,12 +42,21 @@ function Row3({
   data: kpiData,
   data2: productData,
   data3: transactionData,
+  data5,
 }: Props) {
   const { palette } = useTheme();
   const pieColors = [palette.primary[800], palette.primary[500]];
-  // const { data: kpiData } = useGetKpisQuery();
-  // const { data2: productData } = useGetProductsQuery();
-  // const { data3: transactionData } = useGetTransactionsQuery();
+
+  const recentTransactions = useMemo(() => {
+    if (data5) {
+      return data5.response.map((item) => ({
+        total: item.amount,
+        tip: item.amount_1,
+        createdAt: item.createdAt.value,
+        cardholderName: item.cardholderName,
+      }));
+    }
+  }, [data5]);
 
   const pieChartData = useMemo(() => {
     if (kpiData) {
@@ -77,24 +92,31 @@ function Row3({
   ];
 
   const transactionColumns = [
-    { field: "_id", headerName: "id", flex: 1 },
+    { field: "createdAt", headerName: "Date", flex: 0.8 },
     {
-      field: "buyer",
+      field: "cardholderName",
       headerName: "Buyer",
       flex: 0.67,
     },
     {
-      field: "amount",
-      headerName: "Amount",
+      field: "total",
+      headerName: "Total",
       flex: 0.35,
-      renderCell: (params: GridCellParams) => `$${params.value}`,
+      renderCell: (params: GridCellParams) => {
+        if (params.value == null || params.value == 0) return `$0`;
+        const dollar = Math.floor(params.value / 100);
+        return `$${dollar}.${params.value % (dollar * 100)}`;
+      },
     },
     {
-      field: "productIds",
-      headerName: "Count",
-      flex: 0.1,
-      renderCell: (params: GridCellParams) =>
-        (params.value as Array<string>).length,
+      field: "tip",
+      headerName: "Tip",
+      flex: 0.3,
+      renderCell: (params: GridCellParams) => {
+        if (params.value == null) return `$0`;
+        const dollar = Math.floor(params.value / 100);
+        return `$${dollar}.${params.value % (dollar * 100)}`;
+      },
     },
   ];
 
@@ -140,7 +162,7 @@ function Row3({
       <DashboardBox gridArea="h">
         <BoxHeader
           title="Recent Orders"
-          sideText={`${transactionData?.length} latest transactions`}
+          sideText={`${recentTransactions?.length} latest transactions`}
         />
         <Box
           mt="1rem"
@@ -166,9 +188,9 @@ function Row3({
             columnHeaderHeight={25}
             rowHeight={35}
             hideFooter={true}
-            rows={transactionData || []}
+            rows={recentTransactions || []}
             columns={transactionColumns}
-            getRowId={(row) => row._id}
+            getRowId={(row) => row.createdAt}
           />
         </Box>
       </DashboardBox>

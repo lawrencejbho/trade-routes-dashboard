@@ -5,21 +5,33 @@ import Row3 from "./Row3";
 
 import {
   GetKpisResponse,
+  GetPopularDrinksResponse,
   GetProductsResponse,
   GetTransactionsResponse,
+  GetRecentTransactionsResponse,
 } from "@/types";
 
 type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
+  data4: ExtendedGetPopularDrinksResponse;
+  data5: ExtendedGetRecentTransactionsResponse;
 };
+
+interface ExtendedGetPopularDrinksResponse {
+  response: GetPopularDrinksResponse[];
+}
+
+interface ExtendedGetRecentTransactionsResponse {
+  response: GetRecentTransactionsResponse[];
+}
 
 const gridTemplateLargeScreens = `
 "a b c"
 "a b c"
 "a b c"
-"a b f"
+"a b c"
 "d e f"
 "d e f"
 "d h i"
@@ -36,7 +48,7 @@ const gridTemplateSmallScreens = `
 "b"
 "b"
 "b"
-"b"
+"c"
 "c"
 "c"
 "c"
@@ -61,7 +73,7 @@ const gridTemplateSmallScreens = `
 "j"
 `;
 
-function Dashboard({ data, data2, data3 }: Props) {
+function Dashboard({ data, data2, data3, data4, data5 }: Props) {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
   return (
     <Box
@@ -83,9 +95,9 @@ function Dashboard({ data, data2, data3 }: Props) {
             }
       }
     >
-      <Row1 data={data} />
+      <Row1 data={data} data4={data4} />
       <Row2 data={data} data2={data2} />
-      <Row3 data={data} data2={data2} data3={data3} />
+      <Row3 data={data} data2={data2} data3={data3} data5={data5} />
     </Box>
   );
 }

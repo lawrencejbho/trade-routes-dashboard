@@ -22,15 +22,21 @@ import { useTheme } from "@mui/material/styles";
 
 import {
   GetKpisResponse,
+  GetPopularDrinksResponse,
   GetProductsResponse,
   GetTransactionsResponse,
 } from "@/types";
 
+interface ExtendedGetPopularDrinksResponse {
+  response: GetPopularDrinksResponse[];
+}
+
 type Props = {
   data: GetKpisResponse[];
+  data4: ExtendedGetPopularDrinksResponse;
 };
 
-function Row1({ data }: Props) {
+function Row1({ data, data4 }: Props) {
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
 
@@ -72,6 +78,10 @@ function Row1({ data }: Props) {
       })
     );
   }, [data]);
+
+  const popularDrinks = useMemo(() => {
+    return data4.response;
+  }, [data4]);
 
   return (
     <>
@@ -207,20 +217,20 @@ function Row1({ data }: Props) {
 
       <DashboardBox gridArea="c">
         <BoxHeader
-          title="Revenue Month by Month"
-          subtitle="graph representing the revenue month by month"
+          title="Most Popular Drinks"
+          subtitle="bar graph for Q2"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             width={500}
             height={300}
-            data={revenue}
+            data={popularDrinks}
             margin={{
               top: 17,
               right: 15,
-              left: -5,
-              bottom: 58,
+              left: -15,
+              bottom: 75,
             }}
           >
             <defs>
@@ -243,14 +253,21 @@ function Row1({ data }: Props) {
               axisLine={false}
               tickLine={false}
               style={{ fontSize: "10px" }}
+              interval={0}
+              tick={{
+                fontSize: "10px",
+                width: "50px",
+                wordWrap: "break-word",
+              }}
             />
             <YAxis
+              dataKey="count"
               axisLine={false}
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
             <Tooltip />
-            <Bar dataKey="revenue" fill="url(#colorRevenue)" />
+            <Bar dataKey="count" fill="url(#colorRevenue)" />
           </BarChart>
         </ResponsiveContainer>
       </DashboardBox>
@@ -259,3 +276,55 @@ function Row1({ data }: Props) {
 }
 
 export default Row1;
+
+/*
+<DashboardBox gridArea="c">
+<BoxHeader
+  title="Revenue Month by Month"
+  subtitle="graph representing the revenue month by month"
+  sideText="+4%"
+/>
+<ResponsiveContainer width="100%" height="100%">
+  <BarChart
+    width={500}
+    height={300}
+    data={revenue}
+    margin={{
+      top: 17,
+      right: 15,
+      left: -5,
+      bottom: 58,
+    }}
+  >
+    <defs>
+      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+        <stop
+          offset="5%"
+          stopColor={palette.primary[300]}
+          stopOpacity={0.8}
+        />
+        <stop
+          offset="95%"
+          stopColor={palette.primary[300]}
+          stopOpacity={0}
+        />
+      </linearGradient>
+    </defs>
+    <CartesianGrid vertical={false} stroke={palette.grey[800]} />
+    <XAxis
+      dataKey="name"
+      axisLine={false}
+      tickLine={false}
+      style={{ fontSize: "10px" }}
+    />
+    <YAxis
+      axisLine={false}
+      tickLine={false}
+      style={{ fontSize: "10px" }}
+    />
+    <Tooltip />
+    <Bar dataKey="revenue" fill="url(#colorRevenue)" />
+  </BarChart>
+</ResponsiveContainer>
+</DashboardBox>
+*/

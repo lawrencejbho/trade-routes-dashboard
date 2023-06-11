@@ -55,3 +55,15 @@ export interface GetTransactionsResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface GetPopularDrinksResponse {
+  name: string;
+  count: number;
+}
+
+export interface GetRecentTransactionsResponse {
+  amount: number;
+  amount_1: number;
+  createdAt: string;
+  cardholderName: string;
+}
