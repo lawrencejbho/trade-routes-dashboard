@@ -25,11 +25,6 @@ export default async function handler(
     ORDER by createdAT DESC
     LIMIT 50`;
 
-    // const sqlQuery = `SELECT tenders.customerId, count(*)
-    // FROM \`square-big-query.my_states_dataset3.orders\` CROSS JOIN UNNEST(tenders) AS tenders
-    // ORDER by count(*) DESC
-    // LIMIT 50`;
-
     const options = {
       query: sqlQuery,
       location: "US",

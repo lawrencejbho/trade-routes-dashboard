@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BigQuery } from "@google-cloud/bigquery";
 import path from "path";
@@ -11,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  async function popularDrinks() {
+  async function popularDrinks(): Promise<any[]> {
     // helps you get the absolute path within your file system and grabs the json directory
     const jsonDirectory = path.join(process.cwd(), "json");
 
@@ -36,10 +35,12 @@ export default async function handler(
 
     // console.log("Rows:");
     // rows.forEach((row) => console.log(row));
-    res.status(200).json({ response: rows });
+
+    return rows;
   }
   try {
-    popularDrinks();
+    const data = await popularDrinks();
+    res.status(200).json({ response: data });
   } catch (error) {
     res.status(404);
   }
