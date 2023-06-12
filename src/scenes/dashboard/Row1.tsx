@@ -23,20 +23,18 @@ import { useTheme } from "@mui/material/styles";
 import {
   GetKpisResponse,
   GetPopularDrinksResponse,
-  GetTotalSalesResponse,
+  GetTotalSalesDayResponse,
 } from "@/types";
 
 type Props = {
   data: GetKpisResponse[];
   popularDrinksData: GetPopularDrinksResponse[];
-  totalSalesData: GetTotalSalesResponse[];
+  totalSalesDayData: GetTotalSalesDayResponse[];
 };
 
-function Row1({ data, popularDrinksData, totalSalesData }: Props) {
+function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
   const { palette } = useTheme();
   // const { data } = useGetKpisQuery();
-
-  console.log(totalSalesData);
 
   // run this funciton only when data changes
   const revenueExpenses = useMemo(() => {
@@ -79,22 +77,22 @@ function Row1({ data, popularDrinksData, totalSalesData }: Props) {
 
   const totalSales = useMemo(() => {
     return (
-      totalSalesData &&
-      totalSalesData.map(({ day, total_amount }) => {
+      totalSalesDayData &&
+      totalSalesDayData.map(({ day, total_amount }) => {
         return {
           day: day.value,
           total_amount: total_amount,
         };
       })
     );
-  }, [data]);
+  }, [totalSalesDayData]);
 
   return (
     <>
       <DashboardBox gridArea="a">
         <BoxHeader
           title="Total Sales By Day"
-          subtitle="total sales displayed per day "
+          subtitle="total sales per day adjusted for operating hours"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
@@ -203,7 +201,7 @@ function Row1({ data, popularDrinksData, totalSalesData }: Props) {
       <DashboardBox gridArea="c">
         <BoxHeader
           title="Most Popular Drinks"
-          subtitle="bar graph for Q2"
+          subtitle="most popular drinks in Q2"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">

@@ -70,7 +70,14 @@ export interface GetRecentTransactionsResponse {
   cardholderName: string;
 }
 
-export interface GetTotalSalesResponse {
+export interface GetTotalSalesDayResponse {
+  day: {
+    value: string;
+  };
+  total_amount: number;
+}
+
+export interface GetTotalSalesWeekResponse {
   day: {
     value: string;
   };

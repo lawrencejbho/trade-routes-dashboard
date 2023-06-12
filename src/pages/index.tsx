@@ -7,7 +7,8 @@ import { Box } from "@mui/material";
 
 import getPopularDrinks from "@/lib/getPopularDrinks";
 import getRecentTransactions from "@/lib/getRecentTransactions";
-import getTotalSales from "@/lib/getTotalSales";
+import getTotalSalesDay from "@/lib/getTotalSalesDay";
+// import getTotalSalesWeek from "@/lib/getTotalSales";
 
 import {
   GetKpisResponse,
@@ -15,7 +16,7 @@ import {
   GetTransactionsResponse,
   GetPopularDrinksResponse,
   GetRecentTransactionsResponse,
-  GetTotalSalesResponse,
+  GetTotalSalesDayResponse,
 } from "@/types";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -43,8 +44,8 @@ export const getStaticProps: GetStaticProps = async () => {
     JSON.stringify(recentTransactionsResponse)
   );
 
-  const totalSalesResponse = await getTotalSales();
-  const totalSalesData = JSON.parse(JSON.stringify(totalSalesResponse));
+  const totalSalesDayResponse = await getTotalSalesDay();
+  const totalSalesDayData = JSON.parse(JSON.stringify(totalSalesDayResponse));
 
   return {
     props: {
@@ -53,7 +54,7 @@ export const getStaticProps: GetStaticProps = async () => {
       data3,
       popularDrinksData,
       recentTransactionsData,
-      totalSalesData,
+      totalSalesDayData,
     },
     revalidate: 60,
   };
@@ -65,7 +66,7 @@ interface KpiProps {
   data3: GetTransactionsResponse[];
   popularDrinksData: GetPopularDrinksResponse[];
   recentTransactionsData: GetRecentTransactionsResponse[];
-  totalSalesData: GetTotalSalesResponse[];
+  totalSalesDayData: GetTotalSalesDayResponse[];
 }
 
 export default function Home({
@@ -74,7 +75,7 @@ export default function Home({
   data3,
   popularDrinksData,
   recentTransactionsData,
-  totalSalesData,
+  totalSalesDayData,
 }: KpiProps) {
   return (
     <>
@@ -86,7 +87,7 @@ export default function Home({
           data3={data3}
           popularDrinksData={popularDrinksData}
           recentTransactionsData={recentTransactionsData}
-          totalSalesData={totalSalesData}
+          totalSalesDayData={totalSalesDayData}
         />
       </Box>
     </>
