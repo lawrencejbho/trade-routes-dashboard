@@ -15,6 +15,8 @@ import {
   Line,
   CartesianGrid,
   LineChart,
+  Bar,
+  BarChart,
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
@@ -23,7 +25,6 @@ import {
   GetTotalSalesDayResponse,
   GetTotalSalesWeekResponse,
   GetTotalSalesMonthResponse,
-  CustomTooltipProps,
 } from "@/types";
 
 import {
@@ -124,6 +125,7 @@ function Row1({
   /*
   - Custom Tooltip makes it easy to add a $ sign to the total in the tooltip
   - toLocaleString adds a comma in the number automatically
+  - need to add some type checking in the case that value is undefined
   */
   const CustomTooltip = ({
     active,
@@ -131,12 +133,17 @@ function Row1({
     label,
   }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label}`}</p>
-          <p className="tooltip-value">{`Total: $${payload[0].value.toLocaleString()}`}</p>
-        </div>
-      );
+      const value = payload[0]?.value as number | undefined;
+      if (value !== undefined) {
+        return (
+          <div className="custom-tooltip">
+            <p>{`${label}`}</p>
+            <p>
+              Total:<b>{` $${value.toLocaleString()}`}</b>
+            </p>
+          </div>
+        );
+      }
     }
 
     return null;
@@ -151,7 +158,7 @@ function Row1({
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
+          <LineChart
             width={500}
             height={400}
             data={totalSalesDay}
@@ -160,6 +167,48 @@ function Row1({
               right: 25,
               left: -10,
               bottom: 60,
+            }}
+          >
+            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
+
+            <XAxis
+              dataKey="day"
+              tickLine={false}
+              style={{ fontSize: "10px" }}
+            />
+            <YAxis
+              yAxisId="left"
+              tickLine={false}
+              axisLine={false}
+              style={{ fontSize: "10px" }}
+              tickFormatter={(v) => `$${v}`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="total_amount"
+              stroke={palette.tertiary[500]}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </DashboardBox>
+      <DashboardBox gridArea="b">
+        <BoxHeader
+          title="Total Sales by Week"
+          subtitle="total sales without tip per week adjusted for operating hours"
+          sideText="+4%"
+        />
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            width={500}
+            height={400}
+            data={totalSalesWeek}
+            margin={{
+              top: 20,
+              right: 10,
+              left: -10,
+              bottom: 55,
             }}
           >
             <defs>
@@ -171,13 +220,13 @@ function Row1({
                 />
                 <stop
                   offset="95%"
-                  stopColor={palette.primary[300]}
+                  stopColor={palette.primary[500]}
                   stopOpacity={0}
                 />
               </linearGradient>
             </defs>
             <XAxis
-              dataKey="day"
+              dataKey="week"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
@@ -199,48 +248,6 @@ function Row1({
           </AreaChart>
         </ResponsiveContainer>
       </DashboardBox>
-      <DashboardBox gridArea="b">
-        <BoxHeader
-          title="Total Sales by Week"
-          subtitle="total sales without tip per week adjusted for operating hours"
-          sideText="+4%"
-        />
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={400}
-            data={totalSalesWeek}
-            margin={{
-              top: 20,
-              right: 10,
-              left: -10,
-              bottom: 55,
-            }}
-          >
-            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
-            <XAxis
-              dataKey="week"
-              tickLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <YAxis
-              yAxisId="left"
-              tickLine={false}
-              axisLine={false}
-              style={{ fontSize: "10px" }}
-              tickFormatter={(v) => `$${v}`}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            {/* <Legend height={20} wrapperStyle={{ margin: "0 0 10px 0" }} /> */}
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="total_amount"
-              stroke={palette.primary[500]}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </DashboardBox>
       <DashboardBox gridArea="c">
         <BoxHeader
           title="Total Sales by Month"
@@ -248,39 +255,48 @@ function Row1({
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <BarChart
             width={500}
             height={400}
             data={totalSalesMonth}
             margin={{
               top: 20,
               right: 10,
-              left: -10,
+              left: -5,
               bottom: 55,
             }}
           >
+            <defs>
+              <linearGradient id="colorRevenue2" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={palette.tertiary[500]}
+                  stopOpacity={0.7}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={palette.tertiary[500]}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
               dataKey="month"
+              axisLine={false}
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
             <YAxis
-              yAxisId="left"
-              tickLine={false}
+              dataKey="total_amount"
               axisLine={false}
+              tickLine={false}
               style={{ fontSize: "10px" }}
               tickFormatter={(v) => `$${v}`}
             />
             <Tooltip content={<CustomTooltip />} />
-            {/* <Legend height={20} wrapperStyle={{ margin: "0 0 10px 0" }} /> */}
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="total_amount"
-              stroke={palette.primary[500]}
-            />
-          </LineChart>
+            <Bar dataKey="total_amount" fill="url(#colorRevenue2)" />
+          </BarChart>
         </ResponsiveContainer>
       </DashboardBox>
     </>
