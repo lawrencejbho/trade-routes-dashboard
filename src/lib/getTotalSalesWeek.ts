@@ -15,16 +15,25 @@ export default async function totalSalesWeek(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
-  const sqlQuery = `SELECT DISTINCT DATE(DATETIME(TIMESTAMP(p.createdAt), 'Pacific/Pago_Pago')) AS day, t.total_amount
+  /* 
+  This query is similar to getTotalSalesDay
+  - it aggregates the days together in a week
+  - makes it so the week starts on Monday versus Sunday
+  */
+
+  const sqlQuery = `SELECT DISTINCT DATE(DATE_TRUNC(DATETIME(TIMESTAMP(p.createdAt), 'Pacific/Pago_Pago'), WEEK(Monday))) AS week_start, t.total_amount
   FROM \`square-big-query.my_states_dataset3.payments\` AS p
   JOIN (
-    SELECT DATE(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago')) AS day, SUM(totalMoney.amount) AS total_amount
+    SELECT DATE(DATE_TRUNC(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago'), WEEK(Monday))) AS week_start, SUM(amountMoney.amount) AS total_amount
     FROM \`square-big-query.my_states_dataset3.payments\`
-    WHERE createdAt BETWEEN TIMESTAMP("2023-05-01T00:00:00Z") AND TIMESTAMP("2023-06-12T07:41:03Z")
-    GROUP BY DATE(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago'))
-  ) AS t ON DATE(DATETIME(TIMESTAMP(p.createdAt), 'Pacific/Pago_Pago')) = t.day
-  ORDER BY day;
+    WHERE createdAt BETWEEN TIMESTAMP("2023-01-03T00:00:00Z") AND TIMESTAMP("2023-06-12T07:41:03Z")
+      AND status = 'COMPLETED'
+    GROUP BY DATE(DATE_TRUNC(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago'), WEEK(Monday)))
+  ) AS t ON DATE(DATE_TRUNC(DATETIME(TIMESTAMP(p.createdAt), 'Pacific/Pago_Pago'), WEEK(Monday))) = t.week_start
+  ORDER BY week_start;
   `;
+
+  //amountMoney.amount
 
   const options = {
     query: sqlQuery,

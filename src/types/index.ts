@@ -78,7 +78,14 @@ export interface GetTotalSalesDayResponse {
 }
 
 export interface GetTotalSalesWeekResponse {
-  day: {
+  week_start: {
+    value: string;
+  };
+  total_amount: number;
+}
+
+export interface GetTotalSalesMonthResponse {
+  month_start: {
     value: string;
   };
   total_amount: number;

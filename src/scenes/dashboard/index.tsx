@@ -10,6 +10,8 @@ import {
   GetTransactionsResponse,
   GetRecentTransactionsResponse,
   GetTotalSalesDayResponse,
+  GetTotalSalesWeekResponse,
+  GetTotalSalesMonthResponse,
 } from "@/types";
 
 type Props = {
@@ -19,6 +21,8 @@ type Props = {
   popularDrinksData: GetPopularDrinksResponse[];
   recentTransactionsData: GetRecentTransactionsResponse[];
   totalSalesDayData: GetTotalSalesDayResponse[];
+  totalSalesWeekData: GetTotalSalesWeekResponse[];
+  totalSalesMonthData: GetTotalSalesMonthResponse[];
 };
 
 const gridTemplateLargeScreens = `
@@ -74,6 +78,8 @@ function Dashboard({
   popularDrinksData,
   recentTransactionsData,
   totalSalesDayData,
+  totalSalesWeekData,
+  totalSalesMonthData,
 }: Props) {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
   return (
@@ -98,10 +104,11 @@ function Dashboard({
     >
       <Row1
         data={data}
-        popularDrinksData={popularDrinksData}
         totalSalesDayData={totalSalesDayData}
+        totalSalesWeekData={totalSalesWeekData}
+        totalSalesMonthData={totalSalesMonthData}
       />
-      <Row2 data={data} data2={data2} />
+      <Row2 data={data} data2={data2} popularDrinksData={popularDrinksData} />
       <Row3
         data={data}
         data2={data2}

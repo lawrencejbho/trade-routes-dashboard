@@ -10,31 +10,41 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  TooltipProps,
   Area,
   Line,
   CartesianGrid,
-  Legend,
   LineChart,
-  Bar,
-  BarChart,
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
 import {
   GetKpisResponse,
-  GetPopularDrinksResponse,
   GetTotalSalesDayResponse,
+  GetTotalSalesWeekResponse,
+  GetTotalSalesMonthResponse,
+  CustomTooltipProps,
 } from "@/types";
+
+import {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 
 type Props = {
   data: GetKpisResponse[];
-  popularDrinksData: GetPopularDrinksResponse[];
   totalSalesDayData: GetTotalSalesDayResponse[];
+  totalSalesWeekData: GetTotalSalesWeekResponse[];
+  totalSalesMonthData: GetTotalSalesMonthResponse[];
 };
 
-function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
+function Row1({
+  data,
+  totalSalesDayData,
+  totalSalesWeekData,
+  totalSalesMonthData,
+}: Props) {
   const { palette } = useTheme();
-  // const { data } = useGetKpisQuery();
 
   // run this funciton only when data changes
   const revenueExpenses = useMemo(() => {
@@ -75,31 +85,76 @@ function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
     );
   }, [data]);
 
-  const totalSales = useMemo(() => {
+  const totalSalesDay = useMemo(() => {
     return (
       totalSalesDayData &&
       totalSalesDayData.map(({ day, total_amount }) => {
         return {
           day: day.value,
-          total_amount: total_amount,
+          total_amount: total_amount / 100,
         };
       })
     );
   }, [totalSalesDayData]);
+
+  const totalSalesWeek = useMemo(() => {
+    return (
+      totalSalesWeekData &&
+      totalSalesWeekData.map(({ week_start, total_amount }) => {
+        return {
+          week: week_start.value,
+          total_amount: total_amount / 100,
+        };
+      })
+    );
+  }, [totalSalesWeekData]);
+
+  const totalSalesMonth = useMemo(() => {
+    return (
+      totalSalesMonthData &&
+      totalSalesMonthData.map(({ month_start, total_amount }) => {
+        return {
+          month: month_start.value,
+          total_amount: total_amount / 100,
+        };
+      })
+    );
+  }, [totalSalesMonthData]);
+
+  /*
+  - Custom Tooltip makes it easy to add a $ sign to the total in the tooltip
+  - toLocaleString adds a comma in the number automatically
+  */
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: TooltipProps<ValueType, NameType>) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label}`}</p>
+          <p className="tooltip-value">{`Total: $${payload[0].value.toLocaleString()}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <>
       <DashboardBox gridArea="a">
         <BoxHeader
           title="Total Sales By Day"
-          subtitle="total sales per day adjusted for operating hours"
+          subtitle="total sales without tip per day adjusted for operating hours"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             width={500}
             height={400}
-            data={totalSales}
+            data={totalSalesDay}
             margin={{
               top: 15,
               right: 25,
@@ -130,8 +185,9 @@ function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
               tickLine={false}
               axisLine={{ strokeWidth: "0" }}
               style={{ fontSize: "10px" }}
+              tickFormatter={(v) => `$${v}`}
             />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="total_amount"
@@ -145,25 +201,25 @@ function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
       </DashboardBox>
       <DashboardBox gridArea="b">
         <BoxHeader
-          title="Profit and Revenue"
-          subtitle="top line represents revenue, bottom line represents expenses"
+          title="Total Sales by Week"
+          subtitle="total sales without tip per week adjusted for operating hours"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             width={500}
             height={400}
-            data={revenueProfit}
+            data={totalSalesWeek}
             margin={{
               top: 20,
-              right: 0,
+              right: 10,
               left: -10,
               bottom: 55,
             }}
           >
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
-              dataKey="name"
+              dataKey="week"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
@@ -172,84 +228,59 @@ function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
               tickLine={false}
               axisLine={false}
               style={{ fontSize: "10px" }}
+              tickFormatter={(v) => `$${v}`}
             />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              tickLine={false}
-              axisLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <Tooltip />
-            <Legend height={20} wrapperStyle={{ margin: "0 0 10px 0" }} />
+            <Tooltip content={<CustomTooltip />} />
+            {/* <Legend height={20} wrapperStyle={{ margin: "0 0 10px 0" }} /> */}
             <Line
               yAxisId="left"
               type="monotone"
-              dataKey="profit"
+              dataKey="total_amount"
               stroke={palette.primary[500]}
-            />
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="revenue"
-              stroke={palette.primary.main}
             />
           </LineChart>
         </ResponsiveContainer>
       </DashboardBox>
-
       <DashboardBox gridArea="c">
         <BoxHeader
-          title="Most Popular Drinks"
-          subtitle="most popular drinks in Q2"
+          title="Total Sales by Month"
+          subtitle="total sales without tip per month adjusted for operating hours"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
+          <LineChart
             width={500}
-            height={300}
-            data={popularDrinksData}
+            height={400}
+            data={totalSalesMonth}
             margin={{
-              top: 17,
-              right: 15,
-              left: -15,
-              bottom: 75,
+              top: 20,
+              right: 10,
+              left: -10,
+              bottom: 55,
             }}
           >
-            <defs>
-              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor={palette.primary[300]}
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor={palette.primary[300]}
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              interval={0}
-              tick={{
-                fontSize: "10px",
-                width: "50px",
-              }}
-            />
-            <YAxis
-              dataKey="count"
-              axisLine={false}
+              dataKey="month"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
-            <Tooltip />
-            <Bar dataKey="count" fill="url(#colorRevenue)" />
-          </BarChart>
+            <YAxis
+              yAxisId="left"
+              tickLine={false}
+              axisLine={false}
+              style={{ fontSize: "10px" }}
+              tickFormatter={(v) => `$${v}`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            {/* <Legend height={20} wrapperStyle={{ margin: "0 0 10px 0" }} /> */}
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="total_amount"
+              stroke={palette.primary[500]}
+            />
+          </LineChart>
         </ResponsiveContainer>
       </DashboardBox>
     </>
@@ -257,55 +288,3 @@ function Row1({ data, popularDrinksData, totalSalesDayData }: Props) {
 }
 
 export default Row1;
-
-/*
-<DashboardBox gridArea="c">
-<BoxHeader
-  title="Revenue Month by Month"
-  subtitle="graph representing the revenue month by month"
-  sideText="+4%"
-/>
-<ResponsiveContainer width="100%" height="100%">
-  <BarChart
-    width={500}
-    height={300}
-    data={revenue}
-    margin={{
-      top: 17,
-      right: 15,
-      left: -5,
-      bottom: 58,
-    }}
-  >
-    <defs>
-      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-        <stop
-          offset="5%"
-          stopColor={palette.primary[300]}
-          stopOpacity={0.8}
-        />
-        <stop
-          offset="95%"
-          stopColor={palette.primary[300]}
-          stopOpacity={0}
-        />
-      </linearGradient>
-    </defs>
-    <CartesianGrid vertical={false} stroke={palette.grey[800]} />
-    <XAxis
-      dataKey="name"
-      axisLine={false}
-      tickLine={false}
-      style={{ fontSize: "10px" }}
-    />
-    <YAxis
-      axisLine={false}
-      tickLine={false}
-      style={{ fontSize: "10px" }}
-    />
-    <Tooltip />
-    <Bar dataKey="revenue" fill="url(#colorRevenue)" />
-  </BarChart>
-</ResponsiveContainer>
-</DashboardBox>
-*/

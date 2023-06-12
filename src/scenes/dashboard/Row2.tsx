@@ -6,18 +6,18 @@ import BoxHeader from "@/components/BoxHeader";
 import FlexBetween from "@/components/FlexBetween";
 import {
   ResponsiveContainer,
-  LineChart,
   CartesianGrid,
   XAxis,
   YAxis,
   ZAxis,
   Tooltip,
-  Line,
   Cell,
   Pie,
   // PieChart,
   ScatterChart,
   Scatter,
+  Bar,
+  BarChart,
 } from "recharts";
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -26,11 +26,13 @@ import {
   GetKpisResponse,
   GetProductsResponse,
   GetTransactionsResponse,
+  GetPopularDrinksResponse,
 } from "@/types";
 
 type Props = {
   data: GetKpisResponse[];
   data2: GetProductsResponse[];
+  popularDrinksData: GetPopularDrinksResponse[];
 };
 
 const pieData = [
@@ -43,12 +45,14 @@ const PieChart = dynamic(
   { ssr: false }
 );
 
-function Row2({ data: operationalData, data2: productData }: Props) {
+function Row2({
+  data: operationalData,
+  data2: productData,
+  popularDrinksData,
+}: Props) {
   const { palette } = useTheme();
 
   const pieColors = [palette.primary[800], palette.primary[300]];
-  // const { data: operationalData } = useGetKpisQuery();
-  // const { data2: productData } = useGetProductsQuery();
 
   const operationalExpenses = useMemo(() => {
     return (
@@ -82,56 +86,59 @@ function Row2({ data: operationalData, data2: productData }: Props) {
     <>
       <DashboardBox gridArea="d">
         <BoxHeader
-          title="Operational vs Non-Operational Expenses"
-          subtitle="top line represents revenue, bottom line represents expenses"
+          title="Most Popular Drinks"
+          subtitle="most popular drinks in Q2"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={operationalExpenses}
+          <BarChart
+            width={500}
+            height={300}
+            data={popularDrinksData}
             margin={{
-              top: 20,
-              right: 0,
-              left: -10,
-              bottom: 55,
+              top: 17,
+              right: 15,
+              left: -15,
+              bottom: 75,
             }}
           >
+            <defs>
+              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={palette.primary[300]}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={palette.primary[300]}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
               dataKey="name"
+              axisLine={false}
               tickLine={false}
-              style={{ fontSize: "10px" }}
+              interval={0}
+              tick={{
+                fontSize: "10px",
+                width: "50px",
+              }}
             />
             <YAxis
-              yAxisId="left"
-              orientation="left"
-              tickLine={false}
+              dataKey="count"
               axisLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
               tickLine={false}
-              axisLine={false}
               style={{ fontSize: "10px" }}
             />
             <Tooltip />
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="Non Operational Expenses"
-              stroke={palette.primary[500]}
-            />
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="Operational Expenses"
-              stroke={palette.primary.main}
-            />
-          </LineChart>
+            <Bar dataKey="count" fill="url(#colorRevenue)" />
+          </BarChart>
         </ResponsiveContainer>
       </DashboardBox>
+
       <DashboardBox gridArea="e">
         <BoxHeader title="Campaigns and Targets" sideText="+4%" />
         <FlexBetween mt="0.25rem" gap="1.5rem" pr="1rem">

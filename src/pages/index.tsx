@@ -8,7 +8,8 @@ import { Box } from "@mui/material";
 import getPopularDrinks from "@/lib/getPopularDrinks";
 import getRecentTransactions from "@/lib/getRecentTransactions";
 import getTotalSalesDay from "@/lib/getTotalSalesDay";
-// import getTotalSalesWeek from "@/lib/getTotalSales";
+import getTotalSalesWeek from "@/lib/getTotalSalesWeek";
+import getTotalSalesMonth from "@/lib/getTotalSalesMonth";
 
 import {
   GetKpisResponse,
@@ -17,6 +18,8 @@ import {
   GetPopularDrinksResponse,
   GetRecentTransactionsResponse,
   GetTotalSalesDayResponse,
+  GetTotalSalesWeekResponse,
+  GetTotalSalesMonthResponse,
 } from "@/types";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -47,6 +50,14 @@ export const getStaticProps: GetStaticProps = async () => {
   const totalSalesDayResponse = await getTotalSalesDay();
   const totalSalesDayData = JSON.parse(JSON.stringify(totalSalesDayResponse));
 
+  const totalSalesWeekResponse = await getTotalSalesWeek();
+  const totalSalesWeekData = JSON.parse(JSON.stringify(totalSalesWeekResponse));
+
+  const totalSalesMonthResponse = await getTotalSalesMonth();
+  const totalSalesMonthData = JSON.parse(
+    JSON.stringify(totalSalesMonthResponse)
+  );
+
   return {
     props: {
       data,
@@ -55,6 +66,8 @@ export const getStaticProps: GetStaticProps = async () => {
       popularDrinksData,
       recentTransactionsData,
       totalSalesDayData,
+      totalSalesWeekData,
+      totalSalesMonthData,
     },
     revalidate: 60,
   };
@@ -67,6 +80,8 @@ interface KpiProps {
   popularDrinksData: GetPopularDrinksResponse[];
   recentTransactionsData: GetRecentTransactionsResponse[];
   totalSalesDayData: GetTotalSalesDayResponse[];
+  totalSalesWeekData: GetTotalSalesWeekResponse[];
+  totalSalesMonthData: GetTotalSalesMonthResponse[];
 }
 
 export default function Home({
@@ -76,6 +91,8 @@ export default function Home({
   popularDrinksData,
   recentTransactionsData,
   totalSalesDayData,
+  totalSalesWeekData,
+  totalSalesMonthData,
 }: KpiProps) {
   return (
     <>
@@ -88,6 +105,8 @@ export default function Home({
           popularDrinksData={popularDrinksData}
           recentTransactionsData={recentTransactionsData}
           totalSalesDayData={totalSalesDayData}
+          totalSalesWeekData={totalSalesWeekData}
+          totalSalesMonthData={totalSalesMonthData}
         />
       </Box>
     </>
