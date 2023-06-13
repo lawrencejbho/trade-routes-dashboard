@@ -30,8 +30,8 @@ export const authOptions: NextAuthOptions = {
         };
 
         if (
-          email !== "dev@traderoutesbar.com" ||
-          password !== "test123pass#@!"
+          email !== process.env.AUTH_EMAIL ||
+          password !== process.env.AUTH_PASSWORD
         ) {
           throw new Error("Invalid Credentials");
         }
