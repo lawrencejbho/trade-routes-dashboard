@@ -27,8 +27,9 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-  ],
+    "**/*.tsx",
+    "public"
+, "src/pages/api/auth/...nextauth.ts"  ],
   "exclude": [
     "node_modules"
   ]

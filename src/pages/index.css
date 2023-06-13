@@ -4,10 +4,9 @@ html,
 body,
 #root, 
 .app { 
-  height: 100%;
   width: 100%;
+  height: 100%;
   font-family: "Inter", sans-serif;
-  /* background-color: #1f2026; */
   background-color: #2B3754;
 
 }
@@ -33,4 +32,12 @@ body,
   background-color: rgba(255, 255, 255, 255);
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.login { 
+  /* background-color: #1f2026; */
+  background-color: white;
+  height: 100vh;
+  width: 100%;
+  padding-top: 10px;
 }

@@ -1,5 +1,9 @@
 // pages/index.tsx
 import type { GetStaticProps, NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import Router from "next/router";
+
 import Navbar from "@/scenes/navbar";
 import Dashboard from "@/scenes/dashboard";
 
@@ -94,21 +98,28 @@ export default function Home({
   totalSalesWeekData,
   totalSalesMonthData,
 }: KpiProps) {
-  return (
-    <>
-      <Box width="100%" height="100vh" padding="1rem 2rem 4rem 2rem">
-        <Navbar />
-        <Dashboard
-          data={data}
-          data2={data2}
-          data3={data3}
-          popularDrinksData={popularDrinksData}
-          recentTransactionsData={recentTransactionsData}
-          totalSalesDayData={totalSalesDayData}
-          totalSalesWeekData={totalSalesWeekData}
-          totalSalesMonthData={totalSalesMonthData}
-        />
-      </Box>
-    </>
-  );
+  const { status } = useSession();
+  useEffect(() => {
+    if (status === "unauthenticated") Router.replace("/auth/login");
+  }, [status]);
+
+  if (status === "authenticated") {
+    return (
+      <div>
+        <Box width="100%" height="100vh" padding="1rem 2rem 4rem 2rem">
+          <Navbar />
+          <Dashboard
+            data={data}
+            data2={data2}
+            data3={data3}
+            popularDrinksData={popularDrinksData}
+            recentTransactionsData={recentTransactionsData}
+            totalSalesDayData={totalSalesDayData}
+            totalSalesWeekData={totalSalesWeekData}
+            totalSalesMonthData={totalSalesMonthData}
+          />
+        </Box>
+      </div>
+    );
+  }
 }

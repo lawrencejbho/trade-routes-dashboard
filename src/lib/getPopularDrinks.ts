@@ -19,8 +19,9 @@ export default async function popularDrinks(): Promise<any[]> {
 
   /*
 - this checks each orders for a given time frame for each drink that was ordered
-- it does not account for quantity yet
+- checks that the order was completed 
 - It will sum the total per drink and then return the top 10 drinks and their quantity
+- it does not account for quantity yet, some drinks are ordered with quantity instead of explicity displayed
 */
 
   const sqlQuery = `SELECT lineItems.name, count(*) AS count
