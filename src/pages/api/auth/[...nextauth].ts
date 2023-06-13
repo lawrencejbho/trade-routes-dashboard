@@ -41,8 +41,8 @@ export const authOptions: NextAuthOptions = {
 
         const user: User = {
           id: "1",
-          name: email,
-          email: email,
+          name: "name",
+          email: "dev@traderoutesbar.com",
         };
 
         return user;
