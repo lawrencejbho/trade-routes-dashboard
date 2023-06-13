@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
 
         if (
           email !== "dev@traderoutesbar.com" ||
-          password !== process.env.NEXTAUTH_SECRET
+          password !== "test123pass#@!"
         ) {
           throw new Error("Invalid Credentials");
         }
@@ -49,6 +49,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/login",
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);
