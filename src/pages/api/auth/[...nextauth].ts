@@ -1,12 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
 
@@ -35,11 +29,14 @@ export const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        if (email !== "dev@traderoutesbar.com" || password !== "7&F%R04r3FmB") {
+        if (
+          email !== "dev@traderoutesbar.com" ||
+          password !== process.env.NEXTAUTH_SECRET
+        ) {
           throw new Error("Invalid Credentials");
         }
 
-        const user: User = {
+        const user = {
           id: "1",
           name: "name",
           email: "dev@traderoutesbar.com",
