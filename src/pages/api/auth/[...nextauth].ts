@@ -1,6 +1,12 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
 
@@ -16,7 +22,7 @@ export const authOptions: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {},
-      authorize(credentials, req) {
+      async authorize(credentials) {
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
@@ -33,7 +39,13 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid Credentials");
         }
 
-        return { res: "complete" };
+        const user: User = {
+          id: "1",
+          name: "name",
+          email: email,
+        };
+
+        return user;
       },
     }),
   ],
