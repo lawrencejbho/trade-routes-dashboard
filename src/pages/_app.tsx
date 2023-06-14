@@ -1,14 +1,16 @@
 // pages/_app.tsx
 import Head from "next/head";
 import { AppProps } from "next/app";
+import { Analytics } from "@vercel/analytics/react";
+
+import { SessionProvider } from "next-auth/react";
+
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createEmotionCache from "../utils/createEmotionCache";
 import { themeSettings } from "../styles/theme";
 import "./index.css";
-
-import { SessionProvider } from "next-auth/react";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -38,6 +40,7 @@ export default function MyApp(props: MyAppProps) {
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
             <Component {...pageProps} />
+            <Analytics />
           </ThemeProvider>
         </CacheProvider>
       </div>

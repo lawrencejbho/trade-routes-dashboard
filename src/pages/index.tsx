@@ -1,12 +1,14 @@
 // pages/index.tsx
 import type { GetStaticProps, NextPage } from "next";
+import Router from "next/router";
+
+import { Analytics } from "@vercel/analytics/react";
+
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import Router from "next/router";
 
 import Navbar from "@/scenes/navbar";
 import Dashboard from "@/scenes/dashboard";
-
 import { Box } from "@mui/material";
 
 import getPopularDrinks from "@/lib/getPopularDrinks";
