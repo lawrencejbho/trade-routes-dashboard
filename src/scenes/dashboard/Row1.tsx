@@ -219,6 +219,28 @@ function Row1({
     return null;
   };
 
+  const CustomTooltipDay = ({
+    active,
+    payload,
+    label,
+  }: TooltipProps<ValueType, NameType>) => {
+    if (active && payload && payload.length) {
+      const value = payload[0]?.value as number | undefined;
+      if (value !== undefined) {
+        return (
+          <div className="custom-tooltip">
+            <p>{`Week ${label}`}</p>
+            <p>
+              Total:<b>{` $${value.toLocaleString()}`}</b>
+            </p>
+          </div>
+        );
+      }
+    }
+
+    return null;
+  };
+
   return (
     <>
       <DashboardBox gridArea="a">
@@ -237,7 +259,6 @@ function Row1({
               left: -10,
               bottom: 60,
             }}
-            // data={salesPerDaySunday[4]}
           >
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
 
@@ -255,7 +276,7 @@ function Row1({
               style={{ fontSize: "10px" }}
               tickFormatter={(v) => `$${v}`}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltipDay />} />
             <Legend
               height={20}
               wrapperStyle={{ margin: "0 0 10px 0" }}

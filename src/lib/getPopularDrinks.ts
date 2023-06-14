@@ -24,12 +24,13 @@ export default async function popularDrinks(): Promise<any[]> {
 - it does not account for quantity yet, some drinks are ordered with quantity instead of explicity displayed
 */
 
-  const sqlQuery = `SELECT lineItems.name, count(*) AS count
-    FROM square-big-query.my_states_dataset3.orders CROSS JOIN UNNEST(lineItems) AS lineItems
-    where createdAt BETWEEN "2023-04-01T00:00:00Z" AND "2023-06-13T00:00:00Z" AND state="COMPLETED"
-    GROUP by lineItems.name
-    ORDER by count DESC
-    LIMIT 10`;
+  const sqlQuery = `SELECT lineItems.name, SUM(lineItems.quantity) AS count
+  FROM square-big-query.my_states_dataset3.orders CROSS JOIN UNNEST(lineItems) AS lineItems
+  WHERE createdAt BETWEEN "2023-04-01T00:00:00Z" AND "2023-06-13T00:00:00Z" AND state="COMPLETED"
+  GROUP BY lineItems.name
+  ORDER BY count DESC
+  LIMIT 100
+  `;
 
   const options = {
     query: sqlQuery,

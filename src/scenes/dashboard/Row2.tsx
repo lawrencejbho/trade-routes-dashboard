@@ -125,6 +125,11 @@ function Row2({
     );
   }, [averageTransactionPriceWeekData]);
 
+  const popularDrinks = useMemo(() => {
+    const slicedArray = popularDrinksData.slice(0, 10);
+    return slicedArray;
+  }, [popularDrinksData]);
+
   const CustomTooltip = ({
     active,
     payload,
@@ -151,31 +156,20 @@ function Row2({
     <>
       <DashboardBox gridArea="d">
         <BoxHeader
-          title="Average Sales Price by Week in Q2"
-          subtitle="average dollar amount per transaction"
-          sideText={`${Math.round(
-            ((averageTransactionPriceWeek[
-              averageTransactionPriceWeek.length - 1
-            ].amount -
-              averageTransactionPriceWeek[
-                averageTransactionPriceWeek.length - 2
-              ].amount) /
-              averageTransactionPriceWeek[
-                averageTransactionPriceWeek.length - 1
-              ].amount) *
-              100
-          )}%`}
+          title="Most Popular Drinks"
+          subtitle="most popular drinks in Q2"
+          sideText=""
         />
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
+          <BarChart
             width={500}
-            height={400}
-            data={averageTransactionPriceWeek}
+            height={300}
+            data={popularDrinks}
             margin={{
-              top: 20,
-              right: 10,
-              left: -10,
-              bottom: 55,
+              top: 17,
+              right: 15,
+              left: -15,
+              bottom: 75,
             }}
           >
             <defs>
@@ -183,37 +177,35 @@ function Row2({
                 <stop
                   offset="5%"
                   stopColor={palette.primary[300]}
-                  stopOpacity={0.5}
+                  stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor={palette.primary[500]}
+                  stopColor={palette.primary[300]}
                   stopOpacity={0}
                 />
               </linearGradient>
             </defs>
+            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
-              dataKey="day"
+              dataKey="name"
+              axisLine={false}
               tickLine={false}
-              style={{ fontSize: "10px" }}
+              interval={0}
+              tick={{
+                fontSize: "10px",
+                width: "50px",
+              }}
             />
             <YAxis
-              dataKey="amount"
+              dataKey="count"
+              axisLine={false}
               tickLine={false}
-              axisLine={{ strokeWidth: "0" }}
               style={{ fontSize: "10px" }}
-              tickFormatter={(v) => `$${v}`}
             />
-            <Tooltip content={<CustomTooltip />} />
-            <Area
-              type="monotone"
-              dataKey="amount"
-              dot={true}
-              stroke={palette.primary.main}
-              fillOpacity={1}
-              fill="url(#colorRevenue)"
-            />
-          </AreaChart>
+            <Tooltip />
+            <Bar dataKey="count" fill="url(#colorRevenue)" />
+          </BarChart>
         </ResponsiveContainer>
       </DashboardBox>
 
@@ -280,23 +272,33 @@ function Row2({
           </Box> */}
         </FlexBetween>
       </DashboardBox>
-
       <DashboardBox gridArea="f">
         <BoxHeader
-          title="Most Popular Drinks"
-          subtitle="most popular drinks in Q2"
-          sideText="+4%"
+          title="Average Sales Price by Week in Q2"
+          subtitle="average dollar amount per transaction"
+          sideText={`${Math.round(
+            ((averageTransactionPriceWeek[
+              averageTransactionPriceWeek.length - 1
+            ].amount -
+              averageTransactionPriceWeek[
+                averageTransactionPriceWeek.length - 2
+              ].amount) /
+              averageTransactionPriceWeek[
+                averageTransactionPriceWeek.length - 1
+              ].amount) *
+              100
+          )}%`}
         />
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
+          <AreaChart
             width={500}
-            height={300}
-            data={popularDrinksData}
+            height={400}
+            data={averageTransactionPriceWeek}
             margin={{
-              top: 17,
-              right: 15,
-              left: -15,
-              bottom: 75,
+              top: 20,
+              right: 10,
+              left: -10,
+              bottom: 55,
             }}
           >
             <defs>
@@ -304,35 +306,37 @@ function Row2({
                 <stop
                   offset="5%"
                   stopColor={palette.primary[300]}
-                  stopOpacity={0.8}
+                  stopOpacity={0.5}
                 />
                 <stop
                   offset="95%"
-                  stopColor={palette.primary[300]}
+                  stopColor={palette.primary[500]}
                   stopOpacity={0}
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              interval={0}
-              tick={{
-                fontSize: "10px",
-                width: "50px",
-              }}
-            />
-            <YAxis
-              dataKey="count"
-              axisLine={false}
+              dataKey="day"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
-            <Tooltip />
-            <Bar dataKey="count" fill="url(#colorRevenue)" />
-          </BarChart>
+            <YAxis
+              dataKey="amount"
+              tickLine={false}
+              axisLine={{ strokeWidth: "0" }}
+              style={{ fontSize: "10px" }}
+              tickFormatter={(v) => `$${v}`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Area
+              type="monotone"
+              dataKey="amount"
+              dot={true}
+              stroke={palette.primary.main}
+              fillOpacity={1}
+              fill="url(#colorRevenue)"
+            />
+          </AreaChart>
         </ResponsiveContainer>
       </DashboardBox>
     </>

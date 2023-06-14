@@ -43,7 +43,7 @@ const gridTemplateLargeScreens = `
 "d e f"
 "d e f"
 "d h f"
-"g h i"
+"d h i"
 "g h i"
 "g h i"
 `;
@@ -71,11 +71,11 @@ const gridTemplateSmallScreens = `
 "f"
 "g"
 "g"
-"g"
 "h"
 "h"
 "h"
 "h"
+"i"
 "i"
 "i"
 `;
@@ -138,6 +138,7 @@ function Dashboard({
         data3={data3}
         recentTransactionsData={recentTransactionsData}
         GetBusiestTimesData={GetBusiestTimesData}
+        popularDrinksData={popularDrinksData}
       />
     </Box>
   );

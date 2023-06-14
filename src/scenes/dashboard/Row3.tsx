@@ -21,6 +21,7 @@ import {
   GetTransactionsResponse,
   GetRecentTransactionsResponse,
   GetBusiestTimesResponse,
+  GetPopularDrinksResponse,
 } from "@/types";
 
 interface ExtendedGridCellParams extends GridCellParams {
@@ -42,6 +43,7 @@ type Props = {
   data3: GetTransactionsResponse[];
   recentTransactionsData: GetRecentTransactionsResponse[];
   GetBusiestTimesData: GetBusiestTimesResponse[];
+  popularDrinksData: GetPopularDrinksResponse[];
 };
 
 const PieChart = dynamic(
@@ -55,6 +57,7 @@ function Row3({
   data3: transactionData,
   recentTransactionsData,
   GetBusiestTimesData,
+  popularDrinksData,
 }: Props) {
   const { palette } = useTheme();
   const pieColors = [palette.primary[800], palette.primary[500]];
@@ -181,42 +184,162 @@ function Row3({
     }
   }, [GetBusiestTimesData]);
 
+  const drinkData = useMemo(() => {
+    const cocktail: any = {
+      "Jinju Juice": "1",
+      "Safe Passage": "1",
+      "Saint Elaine": "1",
+      Babamama: "1",
+      "Captain Takes the Wheel": "1",
+      "Marco Polo": "1",
+      "Spice Exchange": "1",
+      "Uncharted Waters": "1",
+      "Royal Pardon": "1",
+    };
+
+    const beerWine: any = {
+      "Maui Waui IPA": "1",
+      "Taco Truck Lager": "1",
+      "Death & Taxes": "1",
+      "Sauv Blanc": "1",
+      "Brooks Dry Cider": "1",
+      "House Red": "1",
+      "Sparkling (Pine Ridge)": "1",
+      "People's Pilsner": "1",
+      "Rose (Campe Mentelle)": "1",
+      "Chardonnay (Baileyana)": "1",
+    };
+
+    let count = 0;
+    let cocktailCount = 0;
+    let beerWineCount = 0;
+    popularDrinksData.forEach((entry) => {
+      count += entry.count;
+      if (cocktail[entry.name]) {
+        cocktailCount += entry.count;
+      }
+      if (beerWine[entry.name]) {
+        beerWineCount += entry.count;
+      }
+    });
+    console.log(count);
+    console.log(cocktailCount);
+    console.log(beerWineCount);
+
+    return {
+      total: count,
+      well: popularDrinksData[0].count,
+      cocktails: cocktailCount,
+      beerWine: beerWineCount,
+    };
+  }, [popularDrinksData]);
+
+  console.log(popularDrinksData);
+
+  const wellData = [
+    { name: "Group A", value: drinkData.well },
+    { name: "Group B", value: drinkData.total - drinkData.well },
+  ];
+
+  const cocktailData = [
+    { name: "Group A", value: drinkData.cocktails },
+    { name: "Group B", value: drinkData.total - drinkData.cocktails },
+  ];
+
+  const beerWineData = [
+    { name: "Group A", value: drinkData.beerWine },
+    { name: "Group B", value: drinkData.total - drinkData.beerWine },
+  ];
+
   /* Data Grid is looking for an id but mongoDB uses _.id so you need the getRowId */
 
   return (
     <>
       <DashboardBox gridArea="g">
-        <BoxHeader title="Busiest Times of Day" sideText="" />
-        <Box
-          mt="0.5rem"
-          p="0 0.5rem"
-          height="75%"
-          sx={{
-            "& .MuiDataGrid-root": {
-              color: palette.grey[300],
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: `1px solid ${palette.grey[300]}`,
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              borderBottom: `1px solid ${palette.grey[300]}`,
-            },
-            "& .MuiDataGrid-columnSeparator": {
-              visiblity: "hidden",
-            },
-          }}
-        >
-          <DataGrid
-            columnHeaderHeight={25}
-            rowHeight={25}
-            hideFooter={true}
-            rows={busiestTimes || []}
-            columns={busiestTimesColumns}
-            getRowId={(row) => row.transactions}
-          />
-        </Box>
+        <BoxHeader title="Random Categories" sideText="+4%" />
+        <FlexBetween mt="0.5rem" gap="1.5rem" p="0 1rem" textAlign="center">
+          <Box ml="1rem">
+            <PieChart
+              width={90}
+              height={90}
+              margin={{
+                top: 10,
+                right: 0,
+                left: 10,
+                bottom: 20,
+              }}
+            >
+              <Pie
+                stroke="none"
+                data={cocktailData}
+                innerRadius={18}
+                outerRadius={38}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {wellData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={pieColors[index]} />
+                ))}
+              </Pie>
+            </PieChart>
+            <Typography variant="h5">Cocktail Dominance</Typography>
+          </Box>
+
+          <Box>
+            <PieChart
+              width={90}
+              height={90}
+              margin={{
+                top: 10,
+                right: 0,
+                left: 10,
+                bottom: 20,
+              }}
+            >
+              <Pie
+                stroke="none"
+                data={beerWineData}
+                innerRadius={18}
+                outerRadius={38}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {wellData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={pieColors[index]} />
+                ))}
+              </Pie>
+            </PieChart>
+            <Typography variant="h5">Beer/Wine Dominance</Typography>
+          </Box>
+          <Box mr="1rem">
+            <PieChart
+              width={90}
+              height={90}
+              margin={{
+                top: 10,
+                right: 0,
+                left: 10,
+                bottom: 20,
+              }}
+            >
+              <Pie
+                stroke="none"
+                data={wellData}
+                innerRadius={18}
+                outerRadius={38}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {wellData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={pieColors[index]} />
+                ))}
+              </Pie>
+            </PieChart>
+            <Typography variant="h5">Well Dominance</Typography>
+          </Box>
+        </FlexBetween>
       </DashboardBox>
+
       <DashboardBox gridArea="h">
         <BoxHeader
           title="Recent Orders"
@@ -253,28 +376,36 @@ function Row3({
         </Box>
       </DashboardBox>
       <DashboardBox gridArea="i">
-        <BoxHeader title="Expense Breakdown By Category" sideText="+4%" />
-        <FlexBetween mt="0.5rem" gap="0.5rem" p="0 1rem" textAlign="center">
-          {pieChartData?.map((data, i) => (
-            <Box key={`${data[0].name}-${i}`}>
-              <PieChart width={110} height={100}>
-                <Pie
-                  stroke="none"
-                  data={data}
-                  innerRadius={18}
-                  outerRadius={35}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={pieColors[index]} />
-                  ))}
-                </Pie>
-              </PieChart>
-              <Typography variant="h5">{data[0].name}</Typography>
-            </Box>
-          ))}
-        </FlexBetween>
+        <BoxHeader title="Busiest Times of Day" sideText="" />
+        <Box
+          mt="0.5rem"
+          p="0 0.5rem"
+          height="75%"
+          sx={{
+            "& .MuiDataGrid-root": {
+              color: palette.grey[300],
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: `1px solid ${palette.grey[300]}`,
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              borderBottom: `1px solid ${palette.grey[300]}`,
+            },
+            "& .MuiDataGrid-columnSeparator": {
+              visiblity: "hidden",
+            },
+          }}
+        >
+          <DataGrid
+            columnHeaderHeight={25}
+            rowHeight={25}
+            hideFooter={true}
+            rows={busiestTimes || []}
+            columns={busiestTimesColumns}
+            getRowId={(row) => row.transactions}
+          />
+        </Box>
       </DashboardBox>
       {/* <DashboardBox gridArea="j">
         <BoxHeader
