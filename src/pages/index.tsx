@@ -14,6 +14,11 @@ import getRecentTransactions from "@/lib/getRecentTransactions";
 import getTotalSalesDay from "@/lib/getTotalSalesDay";
 import getTotalSalesWeek from "@/lib/getTotalSalesWeek";
 import getTotalSalesMonth from "@/lib/getTotalSalesMonth";
+import getSalesPerDay from "@/lib/getSalesPerDay";
+import getAverageTransactions from "@/lib/getAverageTransactions";
+import getAverageTransactionPrice from "@/lib/getAverageTransactionPrice";
+import getAverageTransactionPriceWeek from "@/lib/getAverageTransactionPriceWeek";
+import getBusiestTimes from "@/lib/getBusiestTimes";
 
 import {
   GetKpisResponse,
@@ -24,6 +29,11 @@ import {
   GetTotalSalesDayResponse,
   GetTotalSalesWeekResponse,
   GetTotalSalesMonthResponse,
+  GetSalesPerDayResponse,
+  GetAverageTransactionPriceResponse,
+  GetAverageTransactionsResponse,
+  GetAverageTransactionPriceWeekResponse,
+  GetBusiestTimesResponse,
 } from "@/types";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -62,6 +72,30 @@ export const getStaticProps: GetStaticProps = async () => {
     JSON.stringify(totalSalesMonthResponse)
   );
 
+  const salesPerDayResponse = await getSalesPerDay();
+  const salesPerDayData = JSON.parse(JSON.stringify(salesPerDayResponse));
+
+  const GetAverageTransactionsResponse = await getAverageTransactions();
+  const averageTransactionsData = JSON.parse(
+    JSON.stringify(GetAverageTransactionsResponse)
+  );
+
+  const GetAverageTransactionPriceResponse = await getAverageTransactionPrice();
+  const averageTransactionPriceData = JSON.parse(
+    JSON.stringify(GetAverageTransactionPriceResponse)
+  );
+
+  const GetAverageTransactionPriceWeekResponse =
+    await getAverageTransactionPriceWeek();
+  const averageTransactionPriceWeekData = JSON.parse(
+    JSON.stringify(GetAverageTransactionPriceWeekResponse)
+  );
+
+  const GetBusiestTimesResponse = await getBusiestTimes();
+  const GetBusiestTimesData = JSON.parse(
+    JSON.stringify(GetBusiestTimesResponse)
+  );
+
   return {
     props: {
       data,
@@ -72,8 +106,13 @@ export const getStaticProps: GetStaticProps = async () => {
       totalSalesDayData,
       totalSalesWeekData,
       totalSalesMonthData,
+      salesPerDayData,
+      averageTransactionsData,
+      averageTransactionPriceData,
+      averageTransactionPriceWeekData,
+      GetBusiestTimesData,
     },
-    revalidate: 60,
+    revalidate: 3600,
   };
 };
 
@@ -86,6 +125,11 @@ interface KpiProps {
   totalSalesDayData: GetTotalSalesDayResponse[];
   totalSalesWeekData: GetTotalSalesWeekResponse[];
   totalSalesMonthData: GetTotalSalesMonthResponse[];
+  salesPerDayData: GetSalesPerDayResponse[];
+  averageTransactionsData: GetAverageTransactionsResponse[];
+  averageTransactionPriceData: GetAverageTransactionPriceResponse[];
+  averageTransactionPriceWeekData: GetAverageTransactionPriceWeekResponse[];
+  GetBusiestTimesData: GetBusiestTimesResponse[];
 }
 
 export default function Home({
@@ -97,6 +141,11 @@ export default function Home({
   totalSalesDayData,
   totalSalesWeekData,
   totalSalesMonthData,
+  salesPerDayData,
+  averageTransactionPriceData,
+  averageTransactionsData,
+  averageTransactionPriceWeekData,
+  GetBusiestTimesData,
 }: KpiProps) {
   const { status } = useSession();
   useEffect(() => {
@@ -106,7 +155,7 @@ export default function Home({
   if (status === "authenticated") {
     return (
       <div>
-        <Box width="100%" height="100vh" padding="1rem 2rem 4rem 2rem">
+        <Box width="100%" height="100vh" padding="1rem 2rem 5rem 2rem">
           <Navbar />
           <Dashboard
             data={data}
@@ -117,6 +166,11 @@ export default function Home({
             totalSalesDayData={totalSalesDayData}
             totalSalesWeekData={totalSalesWeekData}
             totalSalesMonthData={totalSalesMonthData}
+            salesPerDayData={salesPerDayData}
+            averageTransactionsData={averageTransactionsData}
+            averageTransactionPriceData={averageTransactionPriceData}
+            averageTransactionPriceWeekData={averageTransactionPriceWeekData}
+            GetBusiestTimesData={GetBusiestTimesData}
           />
         </Box>
       </div>

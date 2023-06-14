@@ -20,6 +20,7 @@ import {
   GetProductsResponse,
   GetTransactionsResponse,
   GetRecentTransactionsResponse,
+  GetBusiestTimesResponse,
 } from "@/types";
 
 interface ExtendedGridCellParams extends GridCellParams {
@@ -40,6 +41,7 @@ type Props = {
   data2: GetProductsResponse[];
   data3: GetTransactionsResponse[];
   recentTransactionsData: GetRecentTransactionsResponse[];
+  GetBusiestTimesData: GetBusiestTimesResponse[];
 };
 
 const PieChart = dynamic(
@@ -52,6 +54,7 @@ function Row3({
   data2: productData,
   data3: transactionData,
   recentTransactionsData,
+  GetBusiestTimesData,
 }: Props) {
   const { palette } = useTheme();
   const pieColors = [palette.primary[800], palette.primary[500]];
@@ -129,15 +132,61 @@ function Row3({
     },
   ];
 
+  const busiestTimesColumns = [
+    { field: "day", headerName: "Day", flex: 0.67 },
+    {
+      field: "hour",
+      headerName: "Hour",
+      flex: 0.67,
+    },
+    {
+      field: "transactions",
+      headerName: "Transactions",
+      flex: 0.67,
+    },
+  ];
+
+  const busiestTimes = useMemo(() => {
+    const days: any = {
+      2: "Monday",
+      3: "Tuesday",
+      4: "Wednesday",
+      5: "Thursday",
+      6: "Friday",
+      7: "Saturday",
+    };
+    const hours: any = {
+      12: "12:00 - 1:00 pm",
+      13: "1:00 - 2:00 pm",
+      14: "2:00 - 3:00 pm",
+      15: "3:00 - 4:00 pm",
+      16: "4:00 - 5:00 pm",
+      17: "5:00 - 6:00 pm",
+      18: "6:00 - 7:00 pm",
+      19: "7:00 - 8:00 pm",
+      20: "8:00 - 9:00 pm",
+      21: "9:00 - 10:00 pm",
+      22: "10:00 - 11:00 pm",
+      23: "11:00 - 12:00 pm",
+      24: "12:00 - 1:00 pm",
+    };
+    if (GetBusiestTimesData) {
+      return GetBusiestTimesData.map(
+        ({ day_of_week, hour_of_day, transaction_count }) => ({
+          day: days[day_of_week],
+          hour: hours[hour_of_day],
+          transactions: transaction_count,
+        })
+      );
+    }
+  }, [GetBusiestTimesData]);
+
   /* Data Grid is looking for an id but mongoDB uses _.id so you need the getRowId */
 
   return (
     <>
       <DashboardBox gridArea="g">
-        <BoxHeader
-          title="List of Products"
-          sideText={`${productData?.length} products`}
-        />
+        <BoxHeader title="Busiest Times of Day" sideText="" />
         <Box
           mt="0.5rem"
           p="0 0.5rem"
@@ -160,11 +209,11 @@ function Row3({
         >
           <DataGrid
             columnHeaderHeight={25}
-            rowHeight={35}
+            rowHeight={25}
             hideFooter={true}
-            rows={productData || []}
-            columns={productColumns}
-            getRowId={(row) => row._id}
+            rows={busiestTimes || []}
+            columns={busiestTimesColumns}
+            getRowId={(row) => row.transactions}
           />
         </Box>
       </DashboardBox>
@@ -227,7 +276,7 @@ function Row3({
           ))}
         </FlexBetween>
       </DashboardBox>
-      <DashboardBox gridArea="j">
+      {/* <DashboardBox gridArea="j">
         <BoxHeader
           title="Overall Summary and Explanation Data"
           sideText="+15%"
@@ -248,7 +297,7 @@ function Row3({
         <Typography margin="0 1rem" variant="h6">
           Test Data
         </Typography>
-      </DashboardBox>
+      </DashboardBox> */}
     </>
   );
 }

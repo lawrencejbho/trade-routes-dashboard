@@ -90,3 +90,32 @@ export interface GetTotalSalesMonthResponse {
   };
   total_amount: number;
 }
+
+interface SalesPerDayEntry {
+  day: number;
+  total_amount: number;
+}
+
+export interface GetSalesPerDayResponse {
+  weekday: string;
+  data: SalesPerDayEntry[];
+}
+
+export interface GetAverageTransactionsResponse {
+  average_transactions_per_day: number;
+}
+
+export interface GetAverageTransactionPriceResponse {
+  average_amount_per_transaction: number;
+}
+
+export interface GetAverageTransactionPriceWeekResponse {
+  week_start_date: string;
+  average_amount_per_transaction: number;
+}
+
+export interface GetBusiestTimesResponse {
+  day_of_week: number;
+  hour_of_day: number;
+  transaction_count: number;
+}

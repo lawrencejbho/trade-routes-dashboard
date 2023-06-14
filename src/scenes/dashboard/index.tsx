@@ -12,6 +12,11 @@ import {
   GetTotalSalesDayResponse,
   GetTotalSalesWeekResponse,
   GetTotalSalesMonthResponse,
+  GetSalesPerDayResponse,
+  GetAverageTransactionPriceResponse,
+  GetAverageTransactionsResponse,
+  GetAverageTransactionPriceWeekResponse,
+  GetBusiestTimesResponse,
 } from "@/types";
 
 type Props = {
@@ -23,6 +28,11 @@ type Props = {
   totalSalesDayData: GetTotalSalesDayResponse[];
   totalSalesWeekData: GetTotalSalesWeekResponse[];
   totalSalesMonthData: GetTotalSalesMonthResponse[];
+  salesPerDayData: GetSalesPerDayResponse[];
+  averageTransactionsData: GetAverageTransactionsResponse[];
+  averageTransactionPriceData: GetAverageTransactionPriceResponse[];
+  averageTransactionPriceWeekData: GetAverageTransactionPriceWeekResponse[];
+  GetBusiestTimesData: GetBusiestTimesResponse[];
 };
 
 const gridTemplateLargeScreens = `
@@ -32,10 +42,10 @@ const gridTemplateLargeScreens = `
 "a b c"
 "d e f"
 "d e f"
-"d h i"
+"d h f"
 "g h i"
-"g h j"
-"g h j"
+"g h i"
+"g h i"
 `;
 
 const gridTemplateSmallScreens = `
@@ -46,6 +56,7 @@ const gridTemplateSmallScreens = `
 "b"
 "b"
 "b"
+"b"
 "c"
 "c"
 "c"
@@ -67,8 +78,6 @@ const gridTemplateSmallScreens = `
 "h"
 "i"
 "i"
-"j"
-"j"
 `;
 
 function Dashboard({
@@ -80,8 +89,14 @@ function Dashboard({
   totalSalesDayData,
   totalSalesWeekData,
   totalSalesMonthData,
+  salesPerDayData,
+  averageTransactionsData,
+  averageTransactionPriceData,
+  averageTransactionPriceWeekData,
+  GetBusiestTimesData,
 }: Props) {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
+
   return (
     <Box
       width="100%"
@@ -107,13 +122,22 @@ function Dashboard({
         totalSalesDayData={totalSalesDayData}
         totalSalesWeekData={totalSalesWeekData}
         totalSalesMonthData={totalSalesMonthData}
+        salesPerDayData={salesPerDayData}
       />
-      <Row2 data={data} data2={data2} popularDrinksData={popularDrinksData} />
+      <Row2
+        data={data}
+        data2={data2}
+        popularDrinksData={popularDrinksData}
+        averageTransactionsData={averageTransactionsData}
+        averageTransactionPriceData={averageTransactionPriceData}
+        averageTransactionPriceWeekData={averageTransactionPriceWeekData}
+      />
       <Row3
         data={data}
         data2={data2}
         data3={data3}
         recentTransactionsData={recentTransactionsData}
+        GetBusiestTimesData={GetBusiestTimesData}
       />
     </Box>
   );

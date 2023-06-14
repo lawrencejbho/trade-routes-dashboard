@@ -22,8 +22,6 @@ export default function Login({}: Props) {
       password: data.get("password"),
       callbackUrl: "/",
     });
-
-    console.log(res);
   };
 
   return (

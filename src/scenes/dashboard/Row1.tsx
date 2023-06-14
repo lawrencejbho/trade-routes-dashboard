@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import DashboardBox from "@/components/DashboardBox";
 import BoxHeader from "@/components/BoxHeader";
 
@@ -17,6 +17,7 @@ import {
   LineChart,
   Bar,
   BarChart,
+  Legend,
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
@@ -25,6 +26,7 @@ import {
   GetTotalSalesDayResponse,
   GetTotalSalesWeekResponse,
   GetTotalSalesMonthResponse,
+  GetSalesPerDayResponse,
 } from "@/types";
 
 import {
@@ -37,66 +39,46 @@ type Props = {
   totalSalesDayData: GetTotalSalesDayResponse[];
   totalSalesWeekData: GetTotalSalesWeekResponse[];
   totalSalesMonthData: GetTotalSalesMonthResponse[];
+  salesPerDayData: GetSalesPerDayResponse[];
 };
 
+interface Visibility {
+  [key: string]: boolean;
+}
+
 function Row1({
-  data,
-  totalSalesDayData,
+  // totalSalesDayData,
   totalSalesWeekData,
   totalSalesMonthData,
+  salesPerDayData,
 }: Props) {
   const { palette } = useTheme();
 
+  const [visible, setVisible] = useState<Visibility>({
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false,
+  });
+
+  // console.log(visible);
+
+  const [hoverDay, setHoverDay] = useState("");
+
   // run this funciton only when data changes
-  const revenueExpenses = useMemo(() => {
-    return (
-      data &&
-      data[0].monthlyData.map(({ month, revenue, expenses }) => {
-        return {
-          name: month.substring(0, 3),
-          revenue: revenue,
-          expenses: expenses,
-        };
-      })
-    );
-  }, [data]);
 
-  const revenueProfit = useMemo(() => {
-    return (
-      data &&
-      data[0].monthlyData.map(({ month, revenue, expenses }) => {
-        return {
-          name: month.substring(0, 3),
-          revenue: revenue,
-          profit: (revenue - expenses).toFixed(2),
-        };
-      })
-    );
-  }, [data]);
-
-  const revenue = useMemo(() => {
-    return (
-      data &&
-      data[0].monthlyData.map(({ month, revenue }) => {
-        return {
-          name: month.substring(0, 3),
-          revenue: revenue,
-        };
-      })
-    );
-  }, [data]);
-
-  const totalSalesDay = useMemo(() => {
-    return (
-      totalSalesDayData &&
-      totalSalesDayData.map(({ day, total_amount }) => {
-        return {
-          day: day.value,
-          total_amount: total_amount / 100,
-        };
-      })
-    );
-  }, [totalSalesDayData]);
+  // const totalSalesDay = useMemo(() => {
+  //   return (
+  //     totalSalesDayData &&
+  //     totalSalesDayData.map(({ day, total_amount }) => {
+  //       return {
+  //         day: day.value,
+  //         total_amount: total_amount / 100,
+  //       };
+  //     })
+  //   );
+  // }, [totalSalesDayData]);
 
   const totalSalesWeek = useMemo(() => {
     return (
@@ -121,6 +103,94 @@ function Row1({
       })
     );
   }, [totalSalesMonthData]);
+
+  const salesPerDayWednesday = useMemo(() => {
+    return (
+      salesPerDayData &&
+      salesPerDayData.map(({ weekday, data }) => {
+        if (weekday == "wednesday") {
+          return data.map((entry, index) => {
+            return {
+              day: index + 1,
+              wednesday: entry.total_amount / 100,
+            };
+          });
+        }
+      })
+    );
+  }, [salesPerDayData]);
+
+  const salesPerDayThursday = useMemo(() => {
+    return (
+      salesPerDayData &&
+      salesPerDayData.map(({ weekday, data }) => {
+        if (weekday == "thursday") {
+          return data.map((entry, index) => {
+            return {
+              day: index + 1,
+              thursday: entry.total_amount / 100,
+            };
+          });
+        }
+      })
+    );
+  }, [salesPerDayData]);
+
+  const salesPerDayFriday = useMemo(() => {
+    return (
+      salesPerDayData &&
+      salesPerDayData.map(({ weekday, data }) => {
+        if (weekday == "friday") {
+          return data.map((entry, index) => {
+            return {
+              day: index + 1,
+              friday: entry.total_amount / 100,
+            };
+          });
+        }
+      })
+    );
+  }, [salesPerDayData]);
+
+  const salesPerDaySaturday = useMemo(() => {
+    return (
+      salesPerDayData &&
+      salesPerDayData.map(({ weekday, data }) => {
+        if (weekday == "saturday") {
+          return data.map((entry, index) => {
+            return {
+              day: index + 1,
+              saturday: entry.total_amount / 100,
+            };
+          });
+        }
+      })
+    );
+  }, [salesPerDayData]);
+
+  const salesPerDaySunday = useMemo(() => {
+    return (
+      salesPerDayData &&
+      salesPerDayData.map(({ weekday, data }) => {
+        if (weekday == "sunday") {
+          return data.map((entry, index) => {
+            return {
+              day: index + 1,
+              sunday: entry.total_amount / 100,
+            };
+          });
+        }
+      })
+    );
+  }, [salesPerDayData]);
+
+  const handleMouseOver = (e: any) => {
+    setHoverDay(e.dataKey);
+  };
+
+  const handleMouseOut = () => {
+    setHoverDay("");
+  };
 
   /*
   - Custom Tooltip makes it easy to add a $ sign to the total in the tooltip
@@ -153,28 +223,30 @@ function Row1({
     <>
       <DashboardBox gridArea="a">
         <BoxHeader
-          title="Total Sales By Day"
-          subtitle="total sales without tip per day adjusted for operating hours"
+          title="Total Sales Per Day in Q2"
+          subtitle="total sales per day with each line representing a single day"
           sideText="+4%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             width={500}
             height={400}
-            data={totalSalesDay}
             margin={{
               top: 15,
               right: 25,
               left: -10,
               bottom: 60,
             }}
+            // data={salesPerDaySunday[4]}
           >
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
 
             <XAxis
+              type="number"
               dataKey="day"
               tickLine={false}
               style={{ fontSize: "10px" }}
+              domain={[1, 11]}
             />
             <YAxis
               yAxisId="left"
@@ -184,20 +256,71 @@ function Row1({
               tickFormatter={(v) => `$${v}`}
             />
             <Tooltip content={<CustomTooltip />} />
+            <Legend
+              height={20}
+              wrapperStyle={{ margin: "0 0 10px 0" }}
+              onClick={() =>
+                setVisible((prevValue) => {
+                  return { ...prevValue, [hoverDay]: !visible[hoverDay] };
+                })
+              }
+              onMouseOver={handleMouseOver}
+              onMouseOut={handleMouseOut}
+            />
+
             <Line
               yAxisId="left"
               type="monotone"
-              dataKey="total_amount"
+              data={salesPerDayWednesday[0]}
+              dataKey="wednesday"
+              stroke={palette.primary[500]}
+              hide={visible.wednesday}
+            />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              data={salesPerDayThursday[1]}
+              dataKey="thursday"
+              stroke={palette.secondary[500]}
+              hide={visible.thursday}
+            />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              data={salesPerDayFriday[2]}
+              dataKey="friday"
               stroke={palette.tertiary[500]}
+              hide={visible.friday}
+            />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              data={salesPerDaySaturday[3]}
+              dataKey="saturday"
+              stroke="#2583ba"
+              hide={visible.saturday}
+            />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              data={salesPerDaySunday[4]}
+              dataKey="sunday"
+              stroke="#ae2932"
+              hide={visible.sunday}
             />
           </LineChart>
         </ResponsiveContainer>
       </DashboardBox>
       <DashboardBox gridArea="b">
         <BoxHeader
-          title="Total Sales by Week"
+          title="Total Sales by Week in 2023"
           subtitle="total sales without tip per week adjusted for operating hours"
-          sideText="+4%"
+          sideText={`+${Math.round(
+            ((totalSalesWeek[totalSalesWeek.length - 1].total_amount -
+              totalSalesWeek[totalSalesWeek.length - 2].total_amount) /
+              totalSalesWeek[totalSalesWeek.length - 1].total_amount) *
+              100
+          )}%`}
         />
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
@@ -251,8 +374,13 @@ function Row1({
       <DashboardBox gridArea="c">
         <BoxHeader
           title="Total Sales by Month"
-          subtitle="total sales without tip per month adjusted for operating hours"
-          sideText="+4%"
+          subtitle="total sales over the last 12 months"
+          sideText={`${Math.round(
+            ((totalSalesMonth[totalSalesMonth.length - 2].total_amount -
+              totalSalesMonth[totalSalesMonth.length - 3].total_amount) /
+              totalSalesMonth[totalSalesMonth.length - 2].total_amount) *
+              100
+          )}%`}
         />
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
