@@ -15,6 +15,9 @@ export default async function averageTransaction(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+
   /*
   - this query gets the average transactions per business day
   */
@@ -23,7 +26,7 @@ export default async function averageTransaction(): Promise<any[]> {
   FROM (
     SELECT DATE(DATETIME(TIMESTAMP(createdAt), 'UTC-11')) AS day, COUNT(*) AS transaction_count
     FROM \`square-big-query.my_states_dataset3.payments\`
-    WHERE createdAt BETWEEN TIMESTAMP("2023-04-03T00:00:00Z") AND TIMESTAMP("2023-06-12T07:41:03Z")
+    WHERE createdAt BETWEEN TIMESTAMP("2023-04-03T00:00:00Z") AND TIMESTAMP("${formattedDate}")
       AND status = 'COMPLETED'
     GROUP BY DATE(DATETIME(TIMESTAMP(createdAt), 'UTC-11'))
   );

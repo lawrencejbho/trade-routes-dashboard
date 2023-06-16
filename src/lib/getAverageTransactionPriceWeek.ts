@@ -15,6 +15,9 @@ export default async function averageTransactionPriceWeek(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+
   /*
   - this query takes the average amountMoney.amount for a given period and returns as a single record
   - checks for status = COMPLETED
@@ -25,7 +28,7 @@ export default async function averageTransactionPriceWeek(): Promise<any[]> {
   AVG(amountMoney.amount) AS average_amount_per_transaction
 FROM \`square-big-query.my_states_dataset3.payments\`
 WHERE
-  createdAt BETWEEN TIMESTAMP("2023-04-03T00:00:00Z") AND TIMESTAMP("2023-06-12T00:00:00Z")
+  createdAt BETWEEN TIMESTAMP("2023-04-03T00:00:00Z") AND TIMESTAMP("${formattedDate}")
   AND status = 'COMPLETED'
 GROUP BY week_start_date
 ORDER BY week_start_date ASC;

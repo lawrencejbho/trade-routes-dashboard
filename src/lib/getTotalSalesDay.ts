@@ -15,6 +15,9 @@ export default async function totalSalesDay(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+
   /*
   - this query grabs all transactions from a specific time frame
   - checks for status = COMPLETED
@@ -28,7 +31,7 @@ export default async function totalSalesDay(): Promise<any[]> {
   JOIN (
     SELECT DATE(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago')) AS day, SUM(amountMoney.amount) AS total_amount
     FROM \`square-big-query.my_states_dataset3.payments\`
-    WHERE createdAt BETWEEN TIMESTAMP("2023-05-01T00:00:00Z") AND TIMESTAMP("2023-06-12T07:41:03Z")
+    WHERE createdAt BETWEEN TIMESTAMP("2023-05-01T00:00:00Z") AND TIMESTAMP("${formattedDate}")
       AND status = 'COMPLETED'
     GROUP BY DATE(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago'))
   ) AS t ON DATE(DATETIME(TIMESTAMP(p.createdAt), 'Pacific/Pago_Pago')) = t.day

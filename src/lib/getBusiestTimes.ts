@@ -15,6 +15,9 @@ export default async function busiestTimes(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+
   /* 
   - this query will provide the busiest times of day based on createdAt and checking the transaction count
   */
@@ -25,7 +28,7 @@ export default async function busiestTimes(): Promise<any[]> {
   COUNT(*) AS transaction_count
 FROM \`square-big-query.my_states_dataset3.payments\` AS p
 WHERE
-  createdAt BETWEEN TIMESTAMP("2023-01-01T00:00:00Z") AND TIMESTAMP("2023-06-13T07:41:03Z")
+  createdAt BETWEEN TIMESTAMP("2023-01-01T00:00:00Z") AND TIMESTAMP("${formattedDate}")
   AND status = 'COMPLETED'
 GROUP BY day_of_week, hour_of_day
 ORDER BY transaction_count DESC

@@ -17,6 +17,9 @@ export default async function popularDrinks(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+
   /*
 - this checks each orders for a given time frame for each drink that was ordered
 - checks that the order was completed 
@@ -26,7 +29,7 @@ export default async function popularDrinks(): Promise<any[]> {
 
   const sqlQuery = `SELECT lineItems.name, SUM(lineItems.quantity) AS count
   FROM square-big-query.my_states_dataset3.orders CROSS JOIN UNNEST(lineItems) AS lineItems
-  WHERE createdAt BETWEEN "2023-04-01T00:00:00Z" AND "2023-06-13T00:00:00Z" AND state="COMPLETED"
+  WHERE createdAt BETWEEN "2023-04-01T00:00:00Z" AND "${formattedDate}" AND state="COMPLETED"
   GROUP BY lineItems.name
   ORDER BY count DESC
   LIMIT 100

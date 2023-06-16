@@ -15,6 +15,9 @@ export default async function totalSalesMonth(): Promise<any[]> {
     projectId: "square-big-query",
   });
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+
   /* 
   This query is similar to getTotalSalesDay
   - it aggregates the days together by month
@@ -25,7 +28,7 @@ export default async function totalSalesMonth(): Promise<any[]> {
   JOIN (
     SELECT DATE(DATE_TRUNC(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago'), MONTH)) AS month_start, SUM(amountMoney.amount) AS total_amount
     FROM \`square-big-query.my_states_dataset3.payments\`
-    WHERE createdAt BETWEEN TIMESTAMP("2022-06-01T00:00:00Z") AND TIMESTAMP("2023-06-12T07:41:03Z")
+    WHERE createdAt BETWEEN TIMESTAMP("2022-06-01T00:00:00Z") AND TIMESTAMP("${formattedDate}")
       AND status = 'COMPLETED'
     GROUP BY DATE(DATE_TRUNC(DATETIME(TIMESTAMP(createdAt), 'Pacific/Pago_Pago'), MONTH))
   ) AS t ON DATE(DATE_TRUNC(DATETIME(TIMESTAMP(p.createdAt), 'Pacific/Pago_Pago'), MONTH)) = t.month_start
