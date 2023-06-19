@@ -2,8 +2,6 @@
 import type { GetStaticProps, NextPage } from "next";
 import Router from "next/router";
 
-import { Analytics } from "@vercel/analytics/react";
-
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
@@ -114,7 +112,7 @@ export const getStaticProps: GetStaticProps = async () => {
       averageTransactionPriceWeekData,
       GetBusiestTimesData,
     },
-    revalidate: 3600,
+    revalidate: 60,
   };
 };
 
