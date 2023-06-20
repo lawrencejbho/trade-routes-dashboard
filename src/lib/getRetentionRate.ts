@@ -25,7 +25,7 @@ export default async function retentionRate(): Promise<any[]> {
   const sqlQuery = `WITH customer_counts AS (
     SELECT tenders.customerId, COUNT(*) AS count
     FROM \`square-big-query.my_states_dataset3.orders\` CROSS JOIN UNNEST(tenders) AS tenders
-    WHERE tenders.createdAt >= TIMESTAMP("2022-06-21") AND tenders.createdAt <= ${formattedDate}
+    WHERE tenders.createdAt >= TIMESTAMP("2022-06-21") AND tenders.createdAt <= TIMESTAMP("${formattedDate}")
     GROUP BY tenders.customerId
   )
   SELECT
