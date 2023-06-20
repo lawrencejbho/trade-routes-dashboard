@@ -19,6 +19,7 @@ import getAverageTransactions from "@/lib/getAverageTransactions";
 import getAverageTransactionPrice from "@/lib/getAverageTransactionPrice";
 import getAverageTransactionPriceWeek from "@/lib/getAverageTransactionPriceWeek";
 import getBusiestTimes from "@/lib/getBusiestTimes";
+import getRetentionRate from "@/lib/getRetentionRate";
 
 import {
   GetKpisResponse,
@@ -34,6 +35,7 @@ import {
   GetAverageTransactionsResponse,
   GetAverageTransactionPriceWeekResponse,
   GetBusiestTimesResponse,
+  GetRetentionRateResponse,
 } from "@/types";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -96,6 +98,11 @@ export const getStaticProps: GetStaticProps = async () => {
     JSON.stringify(GetBusiestTimesResponse)
   );
 
+  const GetRetentionRateResponse = await getRetentionRate();
+  const retentionRateData = JSON.parse(
+    JSON.stringify(GetRetentionRateResponse)
+  );
+
   return {
     props: {
       data,
@@ -111,6 +118,7 @@ export const getStaticProps: GetStaticProps = async () => {
       averageTransactionPriceData,
       averageTransactionPriceWeekData,
       GetBusiestTimesData,
+      retentionRateData,
     },
     revalidate: 60,
   };
@@ -130,6 +138,7 @@ interface KpiProps {
   averageTransactionPriceData: GetAverageTransactionPriceResponse[];
   averageTransactionPriceWeekData: GetAverageTransactionPriceWeekResponse[];
   GetBusiestTimesData: GetBusiestTimesResponse[];
+  retentionRateData: GetRetentionRateResponse[];
 }
 
 export default function Home({
@@ -146,6 +155,7 @@ export default function Home({
   averageTransactionsData,
   averageTransactionPriceWeekData,
   GetBusiestTimesData,
+  retentionRateData,
 }: KpiProps) {
   const { status } = useSession();
   useEffect(() => {
@@ -171,6 +181,7 @@ export default function Home({
             averageTransactionPriceData={averageTransactionPriceData}
             averageTransactionPriceWeekData={averageTransactionPriceWeekData}
             GetBusiestTimesData={GetBusiestTimesData}
+            retentionRateData={retentionRateData}
           />
         </Box>
       </div>

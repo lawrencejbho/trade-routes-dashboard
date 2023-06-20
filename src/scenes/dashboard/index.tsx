@@ -17,6 +17,7 @@ import {
   GetAverageTransactionsResponse,
   GetAverageTransactionPriceWeekResponse,
   GetBusiestTimesResponse,
+  GetRetentionRateResponse,
 } from "@/types";
 
 type Props = {
@@ -33,6 +34,7 @@ type Props = {
   averageTransactionPriceData: GetAverageTransactionPriceResponse[];
   averageTransactionPriceWeekData: GetAverageTransactionPriceWeekResponse[];
   GetBusiestTimesData: GetBusiestTimesResponse[];
+  retentionRateData: GetRetentionRateResponse[];
 };
 
 const gridTemplateLargeScreens = `
@@ -94,6 +96,7 @@ function Dashboard({
   averageTransactionPriceData,
   averageTransactionPriceWeekData,
   GetBusiestTimesData,
+  retentionRateData,
 }: Props) {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
 
@@ -131,6 +134,7 @@ function Dashboard({
         averageTransactionsData={averageTransactionsData}
         averageTransactionPriceData={averageTransactionPriceData}
         averageTransactionPriceWeekData={averageTransactionPriceWeekData}
+        retentionRateData={retentionRateData}
       />
       <Row3
         data={data}

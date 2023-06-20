@@ -119,3 +119,9 @@ export interface GetBusiestTimesResponse {
   hour_of_day: number;
   transaction_count: number;
 }
+
+export interface GetRetentionRateResponse {
+  total_customers: number;
+  customers_with_count_1: number;
+  percentage: number;
+}

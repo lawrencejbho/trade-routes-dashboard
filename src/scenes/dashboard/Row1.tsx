@@ -336,7 +336,7 @@ function Row1({
         <BoxHeader
           title="Total Sales by Week in 2023"
           subtitle="total sales without tip per week adjusted for operating hours"
-          sideText={`+${Math.round(
+          sideText={`${Math.round(
             ((totalSalesWeek[totalSalesWeek.length - 1].total_amount -
               totalSalesWeek[totalSalesWeek.length - 2].total_amount) /
               totalSalesWeek[totalSalesWeek.length - 1].total_amount) *
@@ -396,10 +396,10 @@ function Row1({
         <BoxHeader
           title="Total Sales by Month"
           subtitle="total sales over the last 12 months"
-          sideText={`${Math.round(
-            ((totalSalesMonth[totalSalesMonth.length - 2].total_amount -
-              totalSalesMonth[totalSalesMonth.length - 3].total_amount) /
-              totalSalesMonth[totalSalesMonth.length - 2].total_amount) *
+          sideText={`+${Math.round(
+            ((totalSalesMonth[totalSalesMonth.length - 1].total_amount -
+              totalSalesMonth[totalSalesMonth.length - 2].total_amount) /
+              totalSalesMonth[totalSalesMonth.length - 1].total_amount) *
               100
           )}%`}
         />

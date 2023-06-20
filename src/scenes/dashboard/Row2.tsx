@@ -33,6 +33,7 @@ import {
   GetAverageTransactionsResponse,
   GetAverageTransactionPriceResponse,
   GetAverageTransactionPriceWeekResponse,
+  GetRetentionRateResponse,
 } from "@/types";
 
 type Props = {
@@ -42,6 +43,7 @@ type Props = {
   averageTransactionsData: GetAverageTransactionsResponse[];
   averageTransactionPriceData: GetAverageTransactionPriceResponse[];
   averageTransactionPriceWeekData: GetAverageTransactionPriceWeekResponse[];
+  retentionRateData: GetRetentionRateResponse[];
 };
 
 const pieData = [
@@ -61,6 +63,7 @@ function Row2({
   averageTransactionsData,
   averageTransactionPriceData,
   averageTransactionPriceWeekData,
+  retentionRateData,
 }: Props) {
   const { palette } = useTheme();
 
@@ -152,6 +155,8 @@ function Row2({
     return null;
   };
 
+  console.log(retentionRateData);
+
   return (
     <>
       <DashboardBox gridArea="d">
@@ -224,7 +229,7 @@ function Row2({
           )}%`}
         />
         <FlexBetween mt="0.25rem" gap="1.5rem" pr="1rem">
-          <PieChart
+          {/* <PieChart
             width={110}
             height={100}
             margin={{
@@ -246,22 +251,27 @@ function Row2({
                 <Cell key={`cell-${index}`} fill={pieColors[index]} />
               ))}
             </Pie>
-          </PieChart>
-          <Box ml="-0.7rem" flexBasis="40%" textAlign="center">
+          </PieChart> */}
+          <Box ml="1rem" mt="1rem" flexBasis="40%" textAlign="center">
+            <Typography variant="h5">Customer Retention Rate</Typography>
+            <Typography m="0.3rem 0" variant="h3" color={palette.primary[300]}>
+              {`${retentionRateData[0].percentage.toFixed(2)}%`}
+            </Typography>
+            <Typography variant="h6">last 12 months</Typography>
+          </Box>
+          <Box ml="-0.7rem" mt="1rem" flexBasis="40%" textAlign="center">
             <Typography variant="h5">Averages Sales</Typography>
             <Typography m="0.3rem 0" variant="h3" color={palette.primary[300]}>
               {`${averageTransactions?.toString().slice(0, 2)}`}
             </Typography>
             <Typography variant="h6">per business day</Typography>
           </Box>
-          <Box ml="-0.7rem" flexBasis="40%" textAlign="center">
+          <Box ml="-0.7rem" mt="1rem" flexBasis="40%" textAlign="center">
             <Typography variant="h5">Average Transaction Amount</Typography>
             <Typography m="0.3rem 0" variant="h3" color={palette.primary[300]}>
               {`$${averageTransactionPrice?.toString().slice(0, 5)}`}
             </Typography>
-            <Typography variant="h6">
-              {/* Finance goals of the campaign that is desired */}
-            </Typography>
+            <Typography variant="h6">for Q2 </Typography>
           </Box>
           {/* <Box flexBasis="40%">
             <Typography variant="h5">Losses in Revenue</Typography>
