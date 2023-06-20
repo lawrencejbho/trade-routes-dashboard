@@ -222,9 +222,6 @@ function Row3({
         beerWineCount += entry.count;
       }
     });
-    console.log(count);
-    console.log(cocktailCount);
-    console.log(beerWineCount);
 
     return {
       total: count,
@@ -233,8 +230,6 @@ function Row3({
       beerWine: beerWineCount,
     };
   }, [popularDrinksData]);
-
-  console.log(popularDrinksData);
 
   const wellData = [
     { name: "Group A", value: drinkData.well },
@@ -256,7 +251,7 @@ function Row3({
   return (
     <>
       <DashboardBox gridArea="g">
-        <BoxHeader title="Random Categories" sideText="+4%" />
+        <BoxHeader title="Drinks by Percentage of Total" sideText="" />
         <FlexBetween mt="0.5rem" gap="1.5rem" p="0 1rem" textAlign="center">
           <Box ml="1rem">
             <PieChart
@@ -282,7 +277,10 @@ function Row3({
                 ))}
               </Pie>
             </PieChart>
-            <Typography variant="h5">Cocktail Dominance</Typography>
+            <Typography variant="h5">
+              Cocktails:
+              {` ${Math.round((drinkData.cocktails / drinkData.total) * 100)}%`}
+            </Typography>
           </Box>
 
           <Box>
@@ -309,7 +307,10 @@ function Row3({
                 ))}
               </Pie>
             </PieChart>
-            <Typography variant="h5">Beer/Wine Dominance</Typography>
+            <Typography variant="h5">
+              Beer/Wine:
+              {` ${Math.round((drinkData.beerWine / drinkData.total) * 100)}%`}
+            </Typography>
           </Box>
           <Box mr="1rem">
             <PieChart
@@ -335,7 +336,10 @@ function Row3({
                 ))}
               </Pie>
             </PieChart>
-            <Typography variant="h5">Well Dominance</Typography>
+            <Typography variant="h5">
+              Well:{" "}
+              {` ${Math.round((drinkData.well / drinkData.total) * 100)}%`}
+            </Typography>
           </Box>
         </FlexBetween>
       </DashboardBox>
