@@ -214,7 +214,7 @@ function Row2({
 
       <DashboardBox gridArea="e">
         <BoxHeader
-          title="Trending Averages in Q2"
+          title="Trends and Averages"
           sideText={`+${Math.round(
             ((averageTransactionPriceWeek[
               averageTransactionPriceWeek.length - 1
