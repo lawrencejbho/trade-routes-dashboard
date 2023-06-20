@@ -155,8 +155,6 @@ function Row2({
     return null;
   };
 
-  console.log(retentionRateData);
-
   return (
     <>
       <DashboardBox gridArea="d">
@@ -222,9 +220,7 @@ function Row2({
               averageTransactionPriceWeek.length - 1
             ].amount -
               averageTransactionPrice) /
-              averageTransactionPriceWeek[
-                averageTransactionPriceWeek.length - 1
-              ].amount) *
+              averageTransactionPrice) *
               100
           )}%`}
         />
@@ -286,7 +282,7 @@ function Row2({
         <BoxHeader
           title="Average Sales Price by Week in Q2"
           subtitle="average dollar amount per transaction"
-          sideText={`${Math.round(
+          sideText={`+${Math.round(
             ((averageTransactionPriceWeek[
               averageTransactionPriceWeek.length - 1
             ].amount -
