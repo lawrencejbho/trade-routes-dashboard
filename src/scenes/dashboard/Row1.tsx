@@ -335,7 +335,7 @@ function Row1({
       <DashboardBox gridArea="b">
         <BoxHeader
           title="Total Sales by Week in 2023"
-          subtitle="total sales without tip per week adjusted for operating hours"
+          subtitle="total sales per week"
           sideText={`${Math.round(
             ((totalSalesWeek[totalSalesWeek.length - 1].total_amount -
               totalSalesWeek[totalSalesWeek.length - 2].total_amount) /
