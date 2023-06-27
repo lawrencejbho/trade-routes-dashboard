@@ -120,6 +120,7 @@ export const getStaticProps: GetStaticProps = async () => {
       GetBusiestTimesData,
       retentionRateData,
     },
+    revalidate: 300,
   };
 };
 
