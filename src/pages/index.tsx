@@ -38,7 +38,7 @@ import {
   GetRetentionRateResponse,
 } from "@/types";
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(
     "https://mern-finance-dashboard-backend.herokuapp.com/kpi/kpis"
   );
