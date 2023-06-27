@@ -1,5 +1,5 @@
 // pages/index.tsx
-import type { GetStaticProps, NextPage } from "next";
+import type { GetStaticProps, GetServerSideProps, NextPage } from "next";
 import Router from "next/router";
 
 import { useSession } from "next-auth/react";
@@ -38,7 +38,7 @@ import {
   GetRetentionRateResponse,
 } from "@/types";
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch(
     "https://mern-finance-dashboard-backend.herokuapp.com/kpi/kpis"
   );
@@ -120,7 +120,6 @@ export const getStaticProps: GetStaticProps = async () => {
       GetBusiestTimesData,
       retentionRateData,
     },
-    revalidate: 60,
   };
 };
 

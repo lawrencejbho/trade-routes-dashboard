@@ -7,7 +7,7 @@ export default async function recentTransactions(): Promise<any[]> {
   const jsonDirectory = path.join(
     process.cwd(),
     "files",
-    "/square-big-query-3917c272476a.json"
+    "/square-big-query-5f548a097a57.json"
   );
   const test = readFileSync(jsonDirectory, "utf8");
 
